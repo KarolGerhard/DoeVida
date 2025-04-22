@@ -6,6 +6,6 @@ interface DonationRepository {
     fun createDonation(donation: Donation): String
     fun getDonation(donationId: String)
     fun updateDonation(donation: Donation)
-    fun deleteDonation(donation: String)
     fun getUserSolicitations(userId: String): ArrayList<Donation>
+    fun deleteDonation(donation: Donation)
 }

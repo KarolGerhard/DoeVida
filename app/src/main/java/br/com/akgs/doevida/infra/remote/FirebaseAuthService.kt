@@ -1,9 +1,10 @@
 package br.com.akgs.doevida.infra.remote
 
-import com.facebook.AccessToken
+import br.com.akgs.doevida.infra.remote.entities.User
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 
 interface FirebaseAuthService {
+    fun signUpWithEmailAndPassword(email: String, password: String)
     fun firebaseAuthWithGoogle(account: GoogleSignInAccount, onComplete: (Boolean) -> Unit)
-    fun firebaseAuthWithFacebook(token: AccessToken, onComplete: (Boolean) -> Unit)
+    fun createUser(user: User, onComplete: (Boolean, String?) -> Unit)
 }

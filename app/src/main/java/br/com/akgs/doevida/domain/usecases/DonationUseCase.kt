@@ -6,5 +6,5 @@ interface DonationUseCase {
     fun getDonation(donationId: String)
     fun createDonation(donation: Donation)
     fun updateDonation(donation: Donation)
-    fun deleteDonation(donationId: String)
+    fun deleteDonation(donationId: Donation)
 }

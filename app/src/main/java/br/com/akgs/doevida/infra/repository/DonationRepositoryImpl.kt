@@ -17,7 +17,7 @@ class DonationRepositoryImpl(private val firebaseDatabaseService: FirebaseDataba
         firebaseDatabaseService.updateDonation(donation)
     }
 
-    override fun deleteDonation(donation: String) {
+    override fun deleteDonation(donation: Donation) {
         firebaseDatabaseService.deleteDonation(donation)
     }
 

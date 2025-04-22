@@ -25,13 +25,13 @@ class FirebasDatabaseServiceImpl : FirebaseDatabaseService {
         return user
     }
 
-    override fun addUser(user: User) {
+    override fun addUser(user: User, onComplete: (Boolean, String?) -> Unit) {
         firestore.collection("users").document(user.id).set(user)
             .addOnSuccessListener {
-                Log.d(TAG, "User added successfully")
+                onComplete(true, null)
             }
             .addOnFailureListener { e ->
-                Log.w(TAG, "Error adding user", e)
+                onComplete(false, e.message)
             }
     }
 
@@ -47,10 +47,11 @@ class FirebasDatabaseServiceImpl : FirebaseDatabaseService {
 
     override fun createDonation(donation: Donation): String {
         var mensage: String = ""
-        firestore.collection("SOLICITACOES").add(donation).addOnSuccessListener { documentReference ->
-            documentReference.id
-            mensage = "Success"
-        }.addOnFailureListener { solicitation ->
+        firestore.collection("SOLICITACOES").add(donation)
+            .addOnSuccessListener { documentReference ->
+                documentReference.id
+                mensage = "Success"
+            }.addOnFailureListener { solicitation ->
             mensage = solicitation.message.toString()
             Log.w("TAG", "Error adding document", solicitation)
         }

@@ -10,7 +10,13 @@ class UserRepositoryImpl(private val firebaseDatabaseService: FirebaseDatabaseSe
     }
 
     override fun addUser(user: User) {
-        firebaseDatabaseService.addUser(user)
+        firebaseDatabaseService.addUser(user, onComplete = { success, _ ->
+            if (success) {
+                println("User added successfully")
+            } else {
+                println("Failed to add user")
+            }
+        })
     }
 
     override fun updateUser(user: User) {

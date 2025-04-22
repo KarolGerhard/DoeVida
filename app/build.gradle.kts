@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.services)
+    kotlin("plugin.serialization") version "2.0.0"
 }
 
 android {
@@ -58,9 +59,16 @@ dependencies {
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.navigation)
     implementation(libs.facebook)
+    implementation(libs.androidx.material.icons.extended)
 
     implementation("com.facebook.android:facebook-login:latest.release")
     implementation(libs.play.services.auth)
+    implementation(libs.kotlinx.coroutines.play.services)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
+    implementation(libs.androidx.material3.lint)
+    implementation("com.google.code.gson:gson:2.10.1")
+
+
 
 
     testImplementation(libs.junit)

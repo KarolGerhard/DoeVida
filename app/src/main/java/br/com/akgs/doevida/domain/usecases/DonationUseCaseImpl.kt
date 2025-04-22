@@ -19,7 +19,7 @@ class DonationUseCaseImpl(
         donationRepository.updateDonation(donation)
     }
 
-    override fun deleteDonation(donationId: String) {
+    override fun deleteDonation(donationId: Donation) {
         donationRepository.deleteDonation(donationId)
     }
 }
