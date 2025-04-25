@@ -1,4 +1,4 @@
-package br.com.akgs.doevida.ui.solicitacion
+package br.com.akgs.doevida.ui.donation
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,9 +32,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.akgs.doevida.R
 import br.com.akgs.doevida.ui.enums.SolicitationState
+import br.com.akgs.doevida.ui.home.HomeAction
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SolicitationScreen(){
+
+    val viewModel = koinViewModel<SolicitationViewModel>()
 
     Scaffold(
         topBar = {
@@ -80,7 +84,7 @@ fun SolicitationScreen(){
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                val items = listOf("Item 1", "Item 2", "Item 3")
+                val items = viewModel.donationState.value.solitacoes
                 items(items.size) { index ->
                     Card(
                         modifier = Modifier
@@ -161,5 +165,6 @@ fun SolicitationScreen(){
 @Preview
 @Composable
 fun SolicitationScreenPreview() {
-    SolicitationScreen()
+    SolicitationScreen(
+    )
 }

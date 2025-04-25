@@ -22,6 +22,15 @@ class FirebaseAuthServiceImpl: FirebaseAuthService {
         }
     }
 
+    override fun currentUser(): User {
+        val user = auth.currentUser
+        return if (user != null) {
+            User(id = user.uid, email = user.email ?: "", password = "", name = user.displayName ?: "")
+        } else {
+            User("", "", "")
+        }
+    }
+
 
     override fun firebaseAuthWithGoogle(account: GoogleSignInAccount, onComplete: (Boolean) -> Unit) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)

@@ -1,6 +1,6 @@
 package br.com.akgs.doevida.infra.remote.entities
 
-class Donation(
+class RequestDonation(
     var id: String,
     var userId: String,
     var name: String? = "",
@@ -9,9 +9,9 @@ class Donation(
     var city: String,
     var state: String,
     var status: String,
-    var hospital: String,
+    var local: String,
 ) {
     override fun toString(): String {
-        return "Solicitation(id='$id', userId='$userId', name=$name, phone=$phone, bloodType=$bloodType, city=$city, state=$state, status=$status, hospital=$hospital)"
+        return "RequestDonation(id='$id', userId='$userId', name=$name, phone=$phone, bloodType=$bloodType, city=$city, state=$state, status=$status, local=$local)"
     }
 }

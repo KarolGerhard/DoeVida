@@ -3,6 +3,7 @@ package br.com.akgs.doevida.ui.home
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,19 +33,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.akgs.doevida.R
-import br.com.akgs.doevida.infra.remote.entities.User
+import br.com.akgs.doevida.ui.register.RegisterAction
 import br.com.akgs.doevida.ui.theme.DoeVidaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(
-//    bloodType: String,
-//    rhFactor: String,
-//    totalDonations: Int,
-//    nextDonationMonth: String,
-//    isEligible: Boolean
-//    user: String
-) {
+fun HomeScreen(onAction: (HomeAction) -> Unit,) {
     Scaffold(
         topBar = {
             Column(
@@ -80,7 +74,7 @@ fun HomeScreen(
                 }
             }
         },
-        containerColor = Color(0x99F6E6E6),
+        containerColor = Color(0x99FFFFFF),
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -269,7 +263,8 @@ fun HomeScreen(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 24.dp),
+                        .padding(top = 24.dp)
+                        .clickable { onAction(HomeAction.NavigateToSolicitation) },
                     colors = CardDefaults.cardColors(
                         containerColor = Color(0xFFFDFDFD)
                     ),
@@ -279,10 +274,15 @@ fun HomeScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(90.dp)
-                            .padding(start = 12.dp),
+                            .border(
+                                width = 1.dp,
+                                color = Color(0xFF95313B),
+                                shape = RoundedCornerShape(8.dp)
+                            ),
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
+                        Spacer(modifier = Modifier.width(8.dp))
                         Icon(
                             painter = painterResource(id = R.drawable.ic_donation),
                             contentDescription = "Blood Donation",
@@ -347,14 +347,7 @@ fun HomeScreen(
 @Composable
 fun HomeScreenPreview() {
     DoeVidaTheme {
-        HomeScreen(
-//            user = "Maria de Fátima"
-//            bloodType = "A",
-//            rhFactor = "+",
-//            totalDonations = 5,
-//            nextDonationMonth = "Janeiro",
-//            isEligible = true
-        )
+        HomeScreen(onAction = {})
     }
 
 }

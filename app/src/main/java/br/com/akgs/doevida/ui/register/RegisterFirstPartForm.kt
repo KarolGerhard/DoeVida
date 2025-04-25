@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedButton
@@ -31,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -78,7 +80,12 @@ fun RegisterFirstPartForm(
             value = state.name,
             onValueChange = { onAction(RegisterAction.OnNameChange(it)) },
             label = { Text("Nome completo") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    defaultKeyboardAction(ImeAction.Next)
+                }
+            ),
         )
         DateInputField(
             label = "Data de nascimento",
@@ -90,7 +97,12 @@ fun RegisterFirstPartForm(
             onValueChange = { onAction(RegisterAction.OnPhoneChange(it)) },
             label = { Text("Celular") },
             modifier = Modifier.fillMaxWidth(),
-            visualTransformation = PhoneMaskVisualTransformation()
+            visualTransformation = PhoneMaskVisualTransformation(),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    defaultKeyboardAction(ImeAction.Next)
+                }
+            ),
         )
         Text(
             text = "Tipo sanguíneo",
@@ -99,7 +111,7 @@ fun RegisterFirstPartForm(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
             ),
-            modifier = Modifier.padding(start = 8.dp)
+            modifier = Modifier.padding(start = 8.dp),
         )
         ExposedDropdownMenuBox(
             modifier = Modifier
@@ -111,7 +123,6 @@ fun RegisterFirstPartForm(
                 isDropdownExpanded = !isDropdownExpanded
             }
         ) {
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically

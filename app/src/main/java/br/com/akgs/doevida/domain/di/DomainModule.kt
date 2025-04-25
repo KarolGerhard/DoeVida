@@ -24,6 +24,7 @@ val domainModule = module {
     factory<DonationUseCase> {
         DonationUseCaseImpl(
             donationRepository = get(),
+            firebaseDatabaseService = get(),
         )
     }
     factory<ReadJsonUseCase> { ReadJsonUseCaseImpl(

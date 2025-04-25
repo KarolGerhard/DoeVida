@@ -1,4 +1,4 @@
-package br.com.akgs.doevida.ui.solicitacion.components
+package br.com.akgs.doevida.ui.donation.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

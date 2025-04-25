@@ -1,11 +1,11 @@
 package br.com.akgs.doevida.infra.repository
 
-import br.com.akgs.doevida.infra.remote.entities.Donation
+import br.com.akgs.doevida.infra.remote.entities.RequestDonation
 
 interface DonationRepository {
-    fun createDonation(donation: Donation): String
+    fun createDonation(requestDonation: RequestDonation): String
     fun getDonation(donationId: String)
-    fun updateDonation(donation: Donation)
-    fun getUserSolicitations(userId: String): ArrayList<Donation>
-    fun deleteDonation(donation: Donation)
+    fun updateDonation(requestDonation: RequestDonation)
+    fun getUserSolicitations(userId: String): ArrayList<RequestDonation>
+    fun deleteDonation(requestDonation: RequestDonation)
 }

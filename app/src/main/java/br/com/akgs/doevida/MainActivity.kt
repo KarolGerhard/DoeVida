@@ -3,9 +3,11 @@ package br.com.akgs.doevida
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,10 +19,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import br.com.akgs.doevida.ui.donation.RequestDonationAction
+import br.com.akgs.doevida.ui.donation.RequestDonationScreen
+import br.com.akgs.doevida.ui.donation.SolicitationScreen
+import br.com.akgs.doevida.ui.home.HomeAction
 import br.com.akgs.doevida.ui.home.HomeScreen
 import br.com.akgs.doevida.ui.login.LoginAction
 import br.com.akgs.doevida.ui.login.LoginScreen
 import br.com.akgs.doevida.ui.login.LoginState
+import br.com.akgs.doevida.ui.navigation.BottomNavigationBar
 import br.com.akgs.doevida.ui.register.RegisterAction
 import br.com.akgs.doevida.ui.register.RegisterScreen
 import br.com.akgs.doevida.ui.theme.DoeVidaTheme
@@ -33,16 +40,52 @@ class MainActivity : ComponentActivity() {
         setContent {
             DoeVidaTheme {
                 val navController = rememberNavController()
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+                val auth = FirebaseAuth.getInstance()
+
+                Scaffold (
+                    modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+                    bottomBar = {
+                        if (auth.currentUser != null) {
+                            BottomNavigationBar(navController = navController)
+                        }
+                    }
+                ) { innerPadding ->
                     NavHost(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding),
                         navController = navController,
-                        startDestination = "login",
+                        startDestination = if (auth.currentUser != null) "home" else "login",
                     ) {
                         composable("home") {
-                            HomeScreen()
+                            HomeScreen(
+                                onAction = { action ->
+                                    when (action) {
+
+
+                                        is HomeAction.NavigateToSolicitation -> {
+                                            navController.navigate("solicitation")
+                                        }
+
+                                        else -> {}
+                                    }
+                                },
+                            )
+                        }
+                        composable("request_donation") {
+                             RequestDonationScreen(
+                                onAction = { action ->
+                                    when (action) {
+                                        is RequestDonationAction.OnSaveClick -> {
+                                            navController.navigate("home"){
+                                                popUpTo("request_donation") { inclusive = true }
+                                            }
+                                        }
+
+                                        else -> {}
+                                    }
+                                },
+                             )
                         }
                         composable("login") {
                             LoginScreen(
@@ -75,6 +118,11 @@ class MainActivity : ComponentActivity() {
                                         else -> {}
                                     }
                                 },
+                            )
+                        }
+                        composable("solicitation") {
+                            SolicitationScreen(
+
                             )
                         }
                     }
@@ -119,11 +167,7 @@ fun AuthOrMainScreen(auth: FirebaseAuth) {
         )
     } else {
         HomeScreen(
-//            user = user!!,  // Pass the user information to MainScreen
-//            onSignOut = {
-//                auth.signOut()
-//                user = null
-//            }
+            onAction = {}
         )
     }
 }
