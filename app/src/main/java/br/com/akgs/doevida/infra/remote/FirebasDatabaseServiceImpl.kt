@@ -2,27 +2,38 @@ package br.com.akgs.doevida.infra.remote
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import br.com.akgs.doevida.infra.remote.entities.Donation
 import br.com.akgs.doevida.infra.remote.entities.RequestDonation
 import br.com.akgs.doevida.infra.remote.entities.User
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.toObject
 
 class FirebasDatabaseServiceImpl : FirebaseDatabaseService {
     private val firestore = FirebaseFirestore.getInstance()
 
-    override fun getUserById(id: String): User? {
-        var user: User? = null
-        firestore.collection("users").document(id).get()
+    override fun getUserById(id: String, onComplete: (User?, String?) -> Unit) {
+       firestore.collection("users").document(id).get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
-                    user = document.toObject(User::class.java)
+                    onComplete(
+                        User(
+                        id = document.id,
+                        name = document.getString("name") ?: "",
+                        bloodType = document.getString("bloodType") ?: "",
+                        phone = document.getString("phone") ?: "",
+                        email = document.getString("email") ?: "",
+                        city = document.getString("city") ?: "",
+                        state = document.getString("state") ?: ""
+                    ), null)
                 } else {
-                    Log.d(TAG, "No such document")
+                    onComplete(null, "Usuário não encontrado")
                 }
             }
             .addOnFailureListener { exception ->
-                Log.d(TAG, "get failed with ", exception)
+                Log.w(TAG, "Error getting user", exception)
+                onComplete(null, exception.message)
             }
-        return user
     }
 
     override fun addUser(user: User, onComplete: (Boolean, String?) -> Unit) {
@@ -45,13 +56,14 @@ class FirebasDatabaseServiceImpl : FirebaseDatabaseService {
             }
     }
 
-    override fun updateRequestDonation(requestDonation: RequestDonation) {
-        firestore.collection("REQUEST_DONATION").document(requestDonation.id).set(requestDonation)
+    override fun updateRequestDonation(requestDonationId: String, requestDonationStatus: String, onComplete: (Boolean, String?) -> Unit) {
+        firestore.collection("REQUEST_DONATION").document(requestDonationId)
+            .update("status", requestDonationStatus)
             .addOnSuccessListener {
-                Log.d(TAG, "Request donation updated successfully")
+                onComplete(true, null)
             }
             .addOnFailureListener { e ->
-                Log.w(TAG, "Error updating request donation", e)
+                onComplete(false, e.message)
             }
     }
 
@@ -75,30 +87,28 @@ class FirebasDatabaseServiceImpl : FirebaseDatabaseService {
             }
     }
 
-    override fun createDonation(requestDonation: RequestDonation): String {
-        var mensage: String = ""
-        firestore.collection("SOLICITACOES").add(requestDonation)
+    override fun createDonation(donation: Donation, onComplete: (Boolean, String?)-> Unit){
+        firestore.collection("DONATION").add(donation)
             .addOnSuccessListener { documentReference ->
-                documentReference.id
-                mensage = "Success"
-            }.addOnFailureListener { solicitation ->
-            mensage = solicitation.message.toString()
-            Log.w("TAG", "Error adding document", solicitation)
-        }
-        return mensage
+                onComplete(true, documentReference.id)
+            }
+            .addOnFailureListener { e ->
+                onComplete(false, e.message)
+            }
     }
 
     override fun getDonation(donation: String) {
         firestore.collection("SOLICITACOES").document(donation).get()
     }
 
-    override fun updateDonation(requestDonation: RequestDonation) {
-        firestore.collection("SOLICITACOES").document(requestDonation.id).set(requestDonation)
+    override fun updateDonation(requestDonationId: String, requestDonationStatus: String, onComplete: (Boolean, String?) -> Unit) {
+        firestore.collection("SOLICITACOES").document(requestDonationId)
+            .update("status", requestDonationStatus)
             .addOnSuccessListener {
-                Log.d(TAG, "DocumentSnapshot successfully updated!")
+                onComplete(true, null)
             }
             .addOnFailureListener { e ->
-                Log.w(TAG, "Error updating document", e)
+                onComplete(false, e.message)
             }
     }
 
@@ -127,10 +137,21 @@ class FirebasDatabaseServiceImpl : FirebaseDatabaseService {
         firestore.collection("REQUEST_DONATION")
             .whereEqualTo("state", state)
             .whereEqualTo("city", city)
+//            .orderBy("status", Query.Direction.ASCENDING)
             .get()
             .addOnSuccessListener { result ->
                 val requestDonations = result.map { document ->
-                    document.toObject(RequestDonation::class.java)
+                    RequestDonation(
+                        id = document.id,
+                        userId = document.getString("userId") ?: "",
+                        name = document.getString("name"),
+                        phone = document.getString("phone"),
+                        bloodType = document.getString("bloodType") ?: "",
+                        city = document.getString("city") ?: "",
+                        state = document.getString("state") ?: "",
+                        status = document.getString("status") ?: "",
+                        local = document.getString("local") ?: ""
+                    )
                 }
                 onComplete(requestDonations, null)
             }

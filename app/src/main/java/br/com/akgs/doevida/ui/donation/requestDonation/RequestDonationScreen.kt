@@ -1,4 +1,4 @@
-package br.com.akgs.doevida.ui.donation
+package br.com.akgs.doevida.ui.donation.requestDonation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,11 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.input.rememberTextFieldState
-import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
-import androidx.compose.material3.Button
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedButton
@@ -22,12 +21,9 @@ import androidx.compose.material3.ExposedDropdownMenuAnchorType.Companion.Primar
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.ExposedDropdownMenuDefaults.TrailingIcon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -44,9 +40,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import br.com.akgs.doevida.ui.register.RegisterAction
-import br.com.akgs.doevida.ui.register.RegisterState
-import br.com.akgs.doevida.ui.register.RegisterViewModel
 import br.com.akgs.doevida.ui.util.PhoneMaskVisualTransformation
 import org.koin.androidx.compose.koinViewModel
 
@@ -59,6 +52,7 @@ fun RequestDonationScreen(
     val viewModel = koinViewModel<RequestDonationViewModel>()
     val state by viewModel.requestDonationState.collectAsState()
     val onAction = viewModel::onAction
+    val scrollState = rememberScrollState()
 
 
     var selectEstado by remember { mutableStateOf("") }
@@ -71,6 +65,13 @@ fun RequestDonationScreen(
 
     var selectedBloodType by remember { mutableStateOf("") }
     var isDropdownExpanded by remember { mutableStateOf(false) }
+
+    var selectedTipoPedido by remember { mutableStateOf("") }
+    var isDropdownTipoPedidoExpanded by remember { mutableStateOf(false) }
+    val tipos = listOf(
+        "Urgente",
+        "Reposição"
+    )
 
 
     val tipoSanguineo = listOf(
@@ -88,7 +89,8 @@ fun RequestDonationScreen(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .verticalScroll(scrollState),
     ) {
         Spacer(modifier = Modifier.height(24.dp))
         Text(
@@ -196,6 +198,67 @@ fun RequestDonationScreen(
                                 selectedBloodType = tipoSanguineo[index]
                                 isDropdownExpanded = false
                                 onAction(RequestDonationAction.OnTipoSanguineoChange(tipoSanguineo[index]))
+                            },
+                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                        )
+                    }
+                }
+            }
+            Text(
+                text = "Tipo pedido",
+                style = TextStyle(
+                    color = Color(0xFF95313B),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold,
+                ),
+                modifier = Modifier.padding(start = 8.dp),
+            )
+            ExposedDropdownMenuBox(
+                modifier = Modifier
+                    .padding(2.dp)
+                    .width(200.dp)
+                    .clip(RoundedCornerShape(10.dp)),
+                expanded = isDropdownTipoPedidoExpanded,
+                onExpandedChange = {
+                    isDropdownTipoPedidoExpanded = !isDropdownTipoPedidoExpanded
+                }
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    TextField(
+                        modifier = Modifier
+                            .menuAnchor(type = PrimaryEditable, enabled = true)
+                            .fillMaxWidth(),
+                        value = selectedTipoPedido,
+                        onValueChange = { },
+                        readOnly = true,
+                        trailingIcon = {
+                            TrailingIcon(expanded = isDropdownTipoPedidoExpanded)
+                        },
+                    )
+                }
+
+                ExposedDropdownMenu(expanded = isDropdownTipoPedidoExpanded,
+                    onDismissRequest = {
+                        isDropdownTipoPedidoExpanded = false
+                    }
+                ) {
+                    tipos.forEachIndexed { index, item ->
+                        DropdownMenuItem(
+                            text = {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(item)
+                                }
+                            },
+                            onClick = {
+                                selectedTipoPedido = tipos[index]
+                                isDropdownTipoPedidoExpanded = false
+                                onAction(RequestDonationAction.OnTipoPedidoChange(tipos[index]))
                             },
                             contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
                         )

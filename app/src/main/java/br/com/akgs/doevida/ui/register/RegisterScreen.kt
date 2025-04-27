@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -35,6 +36,7 @@ fun RegisterScreen(
 ) {
     val viewModel = koinViewModel<RegisterViewModel>()
     val state by viewModel.registerState.collectAsState()
+
 
     var currentStep by remember { mutableStateOf(1) }
 
@@ -73,16 +75,18 @@ fun RegisterScreen(
                 // Primeira parte do formulário
                 RegisterFirstPartForm(
                     state = state,
-                    onAction = { action -> viewModel.onAction(action) }) {
-                    currentStep = 2
-                }
+                    onAction = { action -> viewModel.onAction(action) },
+                    onNext = {
+                        currentStep = 2
+                    })
             } else {
                 // Segunda parte do formulário
                 RegisterSecondPartForm(
                     state = state,
-                    onAction = { action -> viewModel.onAction(action) }) {
-                    currentStep = 1
-                }
+                    onAction = { action -> viewModel.onAction(action) },
+                    onBack = {
+                        currentStep = 1
+                    })
             }
         }
     }
@@ -94,6 +98,8 @@ fun RegisterSecondPartForm(
     onAction: (RegisterAction) -> Unit,
     onBack: () -> Unit
 ) {
+//    val navController = rememberNavController()
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -132,7 +138,10 @@ fun RegisterSecondPartForm(
                 Text("Voltar")
             }
             ElevatedButton(
-                onClick = { onAction(RegisterAction.OnRegisterClick) },
+                onClick = {
+                    onAction(RegisterAction.OnRegisterClick)
+                    onAction(RegisterAction.OnRegisterSuccess)
+                },
                 colors = ButtonDefaults.buttonColors(
                     Color(0xFF690714),
                     contentColor = Color(0xFFFFFFFF)

@@ -15,4 +15,5 @@ interface RegisterAction {
     data object OnContinueClick : RegisterAction
     data object OnRegisterClick : RegisterAction
     data object OnLaunch: RegisterAction
+    data object OnRegisterSuccess: RegisterAction
 }

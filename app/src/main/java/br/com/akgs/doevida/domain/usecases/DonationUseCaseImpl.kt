@@ -13,13 +13,13 @@ class DonationUseCaseImpl(
         return donationRepository.getDonation(donationId)
     }
 
-    override fun createDonation(requestDonation: RequestDonation) {
-        donationRepository.createDonation(requestDonation)
-    }
-
-    override fun updateDonation(requestDonation: RequestDonation) {
-        donationRepository.updateDonation(requestDonation)
-    }
+//    override fun createDonation(requestDonation: RequestDonation) {
+//        donationRepository.createDonation(requestDonation)
+//    }
+//
+//    override fun updateDonation(requestDonation: RequestDonation) {
+//        donationRepository.updateDonation(requestDonation)
+//    }
 
     override fun deleteDonation(requestDonationId: RequestDonation) {
         donationRepository.deleteDonation(requestDonationId)
@@ -40,4 +40,19 @@ class DonationUseCaseImpl(
             }
         }
     }
+
+    override fun getCompatibleBloodTypes(bloodType: String): List<String> {
+        return when (bloodType.uppercase()) {
+            "A+" -> listOf("A+", "A-", "O+", "O-")
+            "A-" -> listOf("A-", "O-")
+            "B+" -> listOf("B+", "B-", "O+", "O-")
+            "B-" -> listOf("B-", "O-")
+            "AB+" -> listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-")
+            "AB-" -> listOf("A-", "B-", "AB-", "O-")
+            "O+" -> listOf("O+", "O-")
+            "O-" -> listOf("O-")
+            else -> emptyList()
+        }
+    }
+
 }

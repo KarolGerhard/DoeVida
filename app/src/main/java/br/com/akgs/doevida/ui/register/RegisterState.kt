@@ -12,6 +12,7 @@ data class RegisterState(
     var cidades: List<String> = emptyList(),
     var dataNasc: String = "",
     var tipoSanguineo: String = "",
+    var message: String = "",
     val onUserChange: (String) -> Unit = {},
     val onPasswordChange: (String) -> Unit = {},
     val onConfirmPasswordChange: (String) -> Unit = {},
@@ -28,5 +29,6 @@ data class RegisterState(
     var errorMessage: String = "",
     var isSuccess: Boolean = false,
     var isLoginGoogle: Boolean = false,
-    var navigateToLogin: Boolean = false
+    var navigateToLogin: Boolean = false,
+    var navigateToHome: Boolean = false
 )

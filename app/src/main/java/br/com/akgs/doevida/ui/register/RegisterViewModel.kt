@@ -50,28 +50,24 @@ class RegisterViewModel(
 
         firebaseAuthService.createUser(user) { success, error ->
             if (success) {
+                firebaseAuthService.signUpWithEmailAndPassword(user.email, user.password)
+                val userId = firebaseAuthService.getUserId()
+                user.id = userId
                 firebaseDatabaseService.addUser(user) { dbSuccess, error ->
                     if (dbSuccess) {
                         // Usuário criado com sucesso
-//                        if (success) {
-//                            firebaseDatabaseService.addUser(user) { dbSuccess, error ->
-//                                if (dbSuccess) {
-//                                    _registerState.value = _registerState.value.copy(
-//                                        message = "Usuário criado com sucesso!"
-//                                    )
-//                                } else {
-//                                    _registerState.value = _registerState.value.copy(
-//                                        message = "Erro ao salvar no Firestore: ${error?.message}"
-//                                    )
-//                                }
-//                            }
-//                        } else {
-//                            _registerState.value = _registerState.value.copy(
-//                                message = "Erro ao criar usuário: ${error?.message}"
-//                            )
-//                        }
+
+                        _registerState.value = _registerState.value.copy(
+                            message = "Usuário criado com sucesso!",
+                            navigateToLogin = true
+
+                        )
+                        onAction(RegisterAction.OnRegisterSuccess)
+
                     } else {
-                        // Erro ao salvar no Firestore
+                        _registerState.value = _registerState.value.copy(
+                            message = "Erro ao criar usuário: ${error}"
+                        )
                     }
                 }
                 _registerState.value = _registerState.value.copy(
@@ -79,7 +75,8 @@ class RegisterViewModel(
                 )
             } else {
                 _registerState.value = _registerState.value.copy(
-                    isLoggedIn = false
+                    isLoggedIn = false,
+                    message = "Erro ao criar usuário: ${error}"
                 )
             }
         }
@@ -115,8 +112,8 @@ class RegisterViewModel(
                 registerUser(user)
                 _registerState.value = _registerState.value.copy(
                     isLoggedIn = true,
-                    navigateToLogin = true
-                )
+
+                    )
             } else {
                 _registerState.value = _registerState.value.copy(
                     isLoggedIn = false

@@ -19,8 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import br.com.akgs.doevida.ui.donation.RequestDonationAction
-import br.com.akgs.doevida.ui.donation.RequestDonationScreen
+import br.com.akgs.doevida.infra.Routes
+import br.com.akgs.doevida.ui.donation.requestDonation.RequestDonationAction
+import br.com.akgs.doevida.ui.donation.requestDonation.RequestDonationScreen
 import br.com.akgs.doevida.ui.donation.SolicitationScreen
 import br.com.akgs.doevida.ui.home.HomeAction
 import br.com.akgs.doevida.ui.home.HomeScreen
@@ -43,9 +44,12 @@ class MainActivity : ComponentActivity() {
                 val auth = FirebaseAuth.getInstance()
 
                 Scaffold (
-                    modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background),
                     bottomBar = {
-                        if (auth.currentUser != null) {
+                        val currentRoute = navController.currentBackStackEntry?.destination?.route
+                        if(currentRoute != Routes.LOGIN && currentRoute != Routes.REGISTER) {
                             BottomNavigationBar(navController = navController)
                         }
                     }
@@ -55,74 +59,60 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize()
                             .padding(innerPadding),
                         navController = navController,
-                        startDestination = if (auth.currentUser != null) "home" else "login",
+                        startDestination = Routes.LOGIN
+//                        startDestination = if (auth.currentUser != null) Routes.HOME else Routes.LOGIN
+
                     ) {
-                        composable("home") {
+                        composable(Routes.HOME) {
                             HomeScreen(
                                 onAction = { action ->
                                     when (action) {
-
-
-                                        is HomeAction.NavigateToSolicitation -> {
-                                            navController.navigate("solicitation")
-                                        }
-
-                                        else -> {}
+                                        is HomeAction.NavigateToSolicitation -> navController.navigate(Routes.SOLICITATION)
                                     }
-                                },
+                                }
                             )
                         }
-                        composable("request_donation") {
-                             RequestDonationScreen(
-                                onAction = { action ->
-                                    when (action) {
-                                        is RequestDonationAction.OnSaveClick -> {
-                                            navController.navigate("home"){
-                                                popUpTo("request_donation") { inclusive = true }
-                                            }
-                                        }
-
-                                        else -> {}
-                                    }
-                                },
-                             )
-                        }
-                        composable("login") {
+                        composable(Routes.LOGIN) {
                             LoginScreen(
                                 state = LoginState(),
                                 onAction = { action ->
                                     when (action) {
-                                        is LoginAction.OnLoginClick -> {
-                                            navController.navigate("home")
-                                        }
-
-                                        is LoginAction.OnNewRegisterClick -> {
-                                            navController.navigate("register")
-                                        }
-
+                                         LoginAction.OnLoginClick -> {
+                                             navController.navigate(Routes.HOME){
+                                                    popUpTo(Routes.LOGIN) { inclusive = true }
+                                             }
+                                         }
+                                         LoginAction.OnNewRegisterClick -> {
+                                             navController.navigate(Routes.REGISTER)
+                                         }
                                         else -> {}
                                     }
                                 }
                             )
                         }
-                        composable("register") {
+                        composable(Routes.REGISTER) {
                             RegisterScreen(
                                 onAction = { action ->
-                                    when (action) {
-                                        is RegisterAction.OnRegisterClick -> {
-                                            navController.navigate("login") {
-                                                popUpTo("register") { inclusive = true }
+                                    when (action){
+                                        RegisterAction.OnRegisterSuccess -> {
+                                            navController.navigate(Routes.HOME){
+                                                popUpTo(Routes.LOGIN) { inclusive = true }
                                             }
                                         }
-
-                                        else -> {}
                                     }
-                                },
+                                }
                             )
                         }
-                        composable("solicitation") {
-                            SolicitationScreen(
-
+                        composable(Routes.SOLICITATION) { SolicitationScreen() }
+                        composable(Routes.REQUEST_DONATION) {
+                            RequestDonationScreen(
+                                onAction = { action ->
+                                    if (action is RequestDonationAction.OnSaveSuccess) {
+                                        navController.navigate(Routes.HOME) {
+                                            popUpTo(Routes.REQUEST_DONATION) { inclusive = true }
+                                        }
+                                    }
+                                }
                             )
                         }
                     }

@@ -1,6 +1,4 @@
-package br.com.akgs.doevida.ui.donation
-
-import br.com.akgs.doevida.ui.login.LoginAction
+package br.com.akgs.doevida.ui.donation.requestDonation
 
 interface RequestDonationAction {
     data class OnLocalChange(val local: String) : RequestDonationAction
@@ -10,7 +8,9 @@ interface RequestDonationAction {
     data class OnCidadeChange(val cidade: String) : RequestDonationAction
     data class OnDataNascChange(val birthDate: String) : RequestDonationAction
     data class OnTipoSanguineoChange(val bloodType: String) : RequestDonationAction
+    data class OnTipoPedidoChange(val type: String) : RequestDonationAction
     data object OnContinueClick : RequestDonationAction
     data object OnSaveClick : RequestDonationAction
+    data object OnSaveSuccess : RequestDonationAction
     data object OnLaunch: RequestDonationAction
 }

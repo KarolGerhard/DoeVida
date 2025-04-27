@@ -5,6 +5,8 @@ import br.com.akgs.doevida.infra.remote.FirebasDatabaseServiceImpl
 import br.com.akgs.doevida.infra.remote.FirebaseAuthService
 import br.com.akgs.doevida.infra.remote.FirebaseAuthServiceImpl
 import br.com.akgs.doevida.infra.remote.FirebaseDatabaseService
+import br.com.akgs.doevida.infra.repository.DonationRepository
+import br.com.akgs.doevida.infra.repository.DonationRepositoryImpl
 import org.koin.dsl.module
 
 val infraModule = module {
@@ -13,6 +15,11 @@ val infraModule = module {
     single<ReadJson> {
         ReadJson(
             context = get(),
+        )
+    }
+    single<DonationRepository> {
+        DonationRepositoryImpl(
+            firebaseDatabaseService = get(),
         )
     }
 }

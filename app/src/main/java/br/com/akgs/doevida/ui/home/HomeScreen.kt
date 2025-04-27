@@ -33,12 +33,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.akgs.doevida.R
-import br.com.akgs.doevida.ui.register.RegisterAction
 import br.com.akgs.doevida.ui.theme.DoeVidaTheme
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(onAction: (HomeAction) -> Unit,) {
+
+    val viewModel = koinViewModel<HomeViewModel>()
+
+
     Scaffold(
         topBar = {
             Column(
@@ -61,7 +65,7 @@ fun HomeScreen(onAction: (HomeAction) -> Unit,) {
                     Column {
                         Text("Olá", style = TextStyle(color = Color.White, fontSize = 24.sp))
                         Text(
-                            "Maria de Fátima",
+                            viewModel.uiState.value.user?.name ?: "",
                             style = TextStyle(color = Color.White, fontSize = 18.sp)
                         )
                     }
@@ -128,7 +132,7 @@ fun HomeScreen(onAction: (HomeAction) -> Unit,) {
                                     )
                                 )
                                 Text(
-                                    text = "O-",
+                                    text = viewModel.uiState.value.user?.bloodType ?: "",
                                     modifier = Modifier.padding(top = 14.dp),
                                     style = TextStyle(
                                         color = Color(0xFFBE1E2D),
@@ -251,8 +255,6 @@ fun HomeScreen(onAction: (HomeAction) -> Unit,) {
                                 )
                             )
                         }
-
-
                     }
                 }
                 HorizontalDivider(
@@ -292,7 +294,7 @@ fun HomeScreen(onAction: (HomeAction) -> Unit,) {
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "Solicitar doação",
+                            text = "Pedidos de doação",
                             style = TextStyle(
                                 color = Color(0xFF95313B),
                                 fontSize = 20.sp,

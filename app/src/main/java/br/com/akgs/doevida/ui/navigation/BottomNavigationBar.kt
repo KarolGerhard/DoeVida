@@ -20,14 +20,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.com.akgs.doevida.R
+import br.com.akgs.doevida.infra.Routes
 
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
-        BottomNavItem("home", "Inicio", R.drawable.ic_home),
-        BottomNavItem("request_donation", "Solicitar", R.drawable.ic_add),
-        BottomNavItem("profile", "Perfil", R.drawable.ic_person)
+        BottomNavItem(Routes.HOME, "Inicio", R.drawable.ic_home),
+        BottomNavItem(Routes.REQUEST_DONATION, "Solicitar", R.drawable.ic_add),
+        BottomNavItem(Routes.PROFILE, "Perfil", R.drawable.ic_person)
     )
     NavigationBar(
         containerColor = Color(0xFF95313B),

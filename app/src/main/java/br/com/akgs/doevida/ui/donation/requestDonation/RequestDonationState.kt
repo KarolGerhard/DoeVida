@@ -1,4 +1,4 @@
-package br.com.akgs.doevida.ui.donation
+package br.com.akgs.doevida.ui.donation.requestDonation
 
 import br.com.akgs.doevida.infra.remote.entities.RequestDonation
 
@@ -11,6 +11,7 @@ data class RequestDonationState (
     var cidades: List<String> = emptyList(),
     var local: String = "",
     var tipoSanguineo: String = "",
+    var tipoPedido: String = "", //arrumar nome
     val onNameChange: (String) -> Unit = {},
     val onPhoneChange: (String) -> Unit = {},
     val onEstadoChange: (String) -> Unit = {},

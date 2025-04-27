@@ -1,4 +1,4 @@
-package br.com.akgs.doevida.ui.donation
+package br.com.akgs.doevida.ui.donation.requestDonation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,7 +6,6 @@ import br.com.akgs.doevida.domain.usecases.ReadJsonUseCase
 import br.com.akgs.doevida.infra.remote.FirebaseAuthService
 import br.com.akgs.doevida.infra.remote.FirebaseDatabaseService
 import br.com.akgs.doevida.infra.remote.entities.RequestDonation
-import br.com.akgs.doevida.infra.remote.entities.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -20,12 +19,10 @@ class RequestDonationViewModel(
     private val _requestDonationState = MutableStateFlow(RequestDonationState())
     val requestDonationState = _requestDonationState.asStateFlow()
 
-    val user = firebaseDatabaseService.getUserById(
-        firebaseAuthService.currentUser()?.id.toString()
-    )
+    val user = firebaseAuthService.currentUser().id
 
     init {
-        getSolicitationsByCity(user?.state, user?.city)
+//        getSolicitationsByCity(user?.state, user?.city)
         loadEstados()
     }
 
@@ -39,8 +36,16 @@ class RequestDonationViewModel(
             is RequestDonationAction.OnEstadoChange -> onEstadoChange(action.estado)
             is RequestDonationAction.OnCidadeChange -> onCidadeChange(action.cidade)
             is RequestDonationAction.OnTipoSanguineoChange -> onTipoSanguineoChange(action.bloodType)
+            is RequestDonationAction.OnTipoPedidoChange -> onTipoPedido(action.type)
             RequestDonationAction.OnSaveClick -> onRequestClick()
         }
+    }
+
+    private fun onTipoPedido(type: String) {
+        _requestDonationState.value = _requestDonationState.value.copy(
+            tipoPedido = type
+        )
+
     }
 
     private fun onLocalChange(local: String) {
@@ -58,7 +63,7 @@ class RequestDonationViewModel(
                 city = _requestDonationState.value.cidade,
                 bloodType = _requestDonationState.value.tipoSanguineo,
                 local = _requestDonationState.value.local,
-                userId = "",
+                userId = user,
                 status = "Pendente",
                 id = "",
             )
@@ -71,6 +76,7 @@ class RequestDonationViewModel(
 
                         navigateToHome = true
                     )
+                    onAction(RequestDonationAction.OnSaveSuccess)
                 } else if (error != null) {
                     // Handle error
                     println("Erro ao criar solicitação: ${error}").toString()
@@ -91,7 +97,7 @@ class RequestDonationViewModel(
                     if (error != null) {
                         // Handle error
                         _requestDonationState.value = _requestDonationState.value.copy(
-                            solitacoes = donations!!
+                            solitacoes = donations ?: emptyList(),
                         )
                         println("Error fetching solicitations: $error")
                     } else {

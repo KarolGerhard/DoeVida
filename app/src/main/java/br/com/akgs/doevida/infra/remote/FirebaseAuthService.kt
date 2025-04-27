@@ -8,4 +8,5 @@ interface FirebaseAuthService {
     fun firebaseAuthWithGoogle(account: GoogleSignInAccount, onComplete: (Boolean) -> Unit)
     fun createUser(user: User, onComplete: (Boolean, String?) -> Unit)
     fun currentUser(): User
+    fun getUserId(): String
 }

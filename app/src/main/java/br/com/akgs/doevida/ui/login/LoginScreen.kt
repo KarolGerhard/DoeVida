@@ -169,9 +169,6 @@ fun LoginScreen(
             Button(
                 onClick = {
                     onAction(LoginAction.OnLoginClick)
-//                    onSignInClick()
-                    // Handle login action
-//                    navigateToAuthOrMainScreen()
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -182,8 +179,7 @@ fun LoginScreen(
                     Color(0xFF690714),
                     contentColor = Color(0xFFFFFFFF)
                 ),
-
-                ) {
+            ) {
                 Text(
                     "Entre",
                     style = TextStyle(

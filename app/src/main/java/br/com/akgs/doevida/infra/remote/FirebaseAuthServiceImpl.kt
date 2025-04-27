@@ -31,6 +31,10 @@ class FirebaseAuthServiceImpl: FirebaseAuthService {
         }
     }
 
+    override fun getUserId(): String {
+        return  auth.currentUser?.uid ?: ""
+    }
+
 
     override fun firebaseAuthWithGoogle(account: GoogleSignInAccount, onComplete: (Boolean) -> Unit) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
