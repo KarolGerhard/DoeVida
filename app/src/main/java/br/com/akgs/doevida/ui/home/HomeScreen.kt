@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,6 +42,14 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreen(onAction: (HomeAction) -> Unit,) {
 
     val viewModel = koinViewModel<HomeViewModel>()
+
+    val actions = viewModel.actions
+
+    LaunchedEffect(Unit) {
+        actions.collect { action ->
+            onAction(action)
+        }
+    }
 
 
     Scaffold(
@@ -266,7 +275,7 @@ fun HomeScreen(onAction: (HomeAction) -> Unit,) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 24.dp)
-                        .clickable { onAction(HomeAction.NavigateToSolicitation) },
+                        .clickable {viewModel.onAction(HomeAction.NavigateToSolicitation)},
                     colors = CardDefaults.cardColors(
                         containerColor = Color(0xFFFDFDFD)
                     ),

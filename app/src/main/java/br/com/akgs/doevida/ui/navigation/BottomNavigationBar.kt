@@ -16,8 +16,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.com.akgs.doevida.R
 import br.com.akgs.doevida.infra.Routes
@@ -38,7 +40,10 @@ fun BottomNavigationBar(navController: NavController) {
             .fillMaxWidth()
             .padding(0.dp)
     ) {
+        val currentBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navController.currentBackStackEntry?.destination?.route
+
+
         items.forEach { item ->
             NavigationBarItem(
                 icon = { Icon(painterResource(id = item.icon), contentDescription = item.label, tint = Color(0xFFFDFDFD)) },
@@ -50,7 +55,7 @@ fun BottomNavigationBar(navController: NavController) {
                 selected = currentRoute == item.route,
                 onClick = {
                     navController.navigate(item.route) {
-                        popUpTo(navController.graph.startDestinationId) { saveState = true }
+                        popUpTo(navController.graph.findStartDestination().id) { saveState = true }
                         launchSingleTop = true
                         restoreState = true
                     }

@@ -7,5 +7,7 @@ object Routes {
     const val SOLICITATION = "solicitation"
     const val REQUEST_DONATION = "request_donation"
     const val PROFILE = "profile"
-    const val DONATION = "donation"
+    const val MYDONATION = "my_donation"
+    const val INFORMATION = "information"
+
 }

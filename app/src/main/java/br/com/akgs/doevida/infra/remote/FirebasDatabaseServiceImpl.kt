@@ -6,8 +6,6 @@ import br.com.akgs.doevida.infra.remote.entities.Donation
 import br.com.akgs.doevida.infra.remote.entities.RequestDonation
 import br.com.akgs.doevida.infra.remote.entities.User
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.toObject
 
 class FirebasDatabaseServiceImpl : FirebaseDatabaseService {
     private val firestore = FirebaseFirestore.getInstance()

@@ -1,4 +1,28 @@
 <resources>
     <string name="app_name">DoeVida</string>
     <string name="id_client_web">557579959757-9st40vtj3v0dpeljk79mb83hon1935ea.apps.googleusercontent.com</string>
+
+        <!-- Register Screen -->
+        <string name="welcome_message">Seja Bem Vindo,</string>
+        <string name="register_instruction">Por favor, informe os seguintes dados:</string>
+        <string name="name_label">Nome completo</string>
+        <string name="birth_date_label">Data de nascimento</string>
+        <string name="phone_label">Celular</string>
+        <string name="blood_type_label">Tipo sanguíneo</string>
+        <string name="state_label">Estado</string>
+        <string name="city_label">Cidade</string>
+        <string name="next_button">Próximo</string>
+        <string name="back_button">Voltar</string>
+        <string name="save_button">Salvar</string>
+        <string name="email_label">Email</string>
+        <string name="password_label">Senha</string>
+        <string name="confirm_password_label">Repita a senha</string>
+        <string name="hide_password">Hide password</string>
+        <string name="show_password">Show password</string>
+
+        <!-- Bottom Bar -->
+        <string name="home">Home</string>
+        <string name="solicitar">Solicitar</string>
+        <string name="profile">Profile</string>
+
 </resources>

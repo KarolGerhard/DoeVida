@@ -5,38 +5,47 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
-class FirebaseAuthServiceImpl: FirebaseAuthService {
+class FirebaseAuthServiceImpl : FirebaseAuthService {
 
     private var auth = FirebaseAuth.getInstance()
 
     override fun createUser(user: User, onComplete: (Boolean, String?) -> Unit) {
-        auth.createUserWithEmailAndPassword(user.email, user.password).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val userId = task.result?.user?.uid
-                user.id = userId ?: ""
-                onComplete(true, userId)
-                //task.result?.user?.uid
-            } else {
-                onComplete(false, task.exception?.message)
+        auth.createUserWithEmailAndPassword(user.email, user.password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val userId = task.result?.user?.uid
+                    user.id = userId ?: ""
+                    onComplete(true, userId)
+                    //task.result?.user?.uid
+                } else {
+                    onComplete(false, task.exception?.message)
+                }
             }
-        }
     }
 
     override fun currentUser(): User {
         val user = auth.currentUser
         return if (user != null) {
-            User(id = user.uid, email = user.email ?: "", password = "", name = user.displayName ?: "")
+            User(
+                id = user.uid,
+                email = user.email ?: "",
+                password = "",
+                name = user.displayName ?: ""
+            )
         } else {
             User("", "", "")
         }
     }
 
     override fun getUserId(): String {
-        return  auth.currentUser?.uid ?: ""
+        return auth.currentUser?.uid ?: ""
     }
 
 
-    override fun firebaseAuthWithGoogle(account: GoogleSignInAccount, onComplete: (Boolean) -> Unit) {
+    override fun firebaseAuthWithGoogle(
+        account: GoogleSignInAccount,
+        onComplete: (Boolean) -> Unit
+    ) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener { task ->
             onComplete(task.isSuccessful)
@@ -46,16 +55,21 @@ class FirebaseAuthServiceImpl: FirebaseAuthService {
 
     override fun signUpWithEmailAndPassword(
         email: String,
-        password: String
+        password: String, onComplete: (Boolean, String?) -> Unit
     ) {
-        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                task.result?.user?.uid
-                // Login success
-            } else {
-                task.exception?.message
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val userId = task.result?.user?.uid
+                    onComplete(true, userId)
+                } else {
+                    onComplete(false, task.exception?.message)
+                }
             }
-        }
+    }
+
+    override fun signOut() {
+        auth.signOut()
     }
 
 //    override suspend fun verifyGoogleSignIn(): Boolean {

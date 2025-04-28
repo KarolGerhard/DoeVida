@@ -7,12 +7,14 @@ import br.com.akgs.doevida.domain.usecases.ReadJsonUseCase
 import br.com.akgs.doevida.infra.remote.FirebaseAuthService
 import br.com.akgs.doevida.infra.remote.FirebaseDatabaseService
 import br.com.akgs.doevida.infra.remote.entities.User
+import br.com.akgs.doevida.ui.login.LoginAction
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(
-    private val authUseCase: AuthUseCase,
     private val readJsonUseCase: ReadJsonUseCase,
     private val firebaseAuthService: FirebaseAuthService,
     private val firebaseDatabaseService: FirebaseDatabaseService
@@ -20,9 +22,9 @@ class RegisterViewModel(
     private val _registerState = MutableStateFlow(RegisterState())
     val registerState = _registerState.asStateFlow()
 
-    init {
-        loadEstados()
-    }
+
+    private val _actions = MutableSharedFlow<RegisterAction>()
+    val actions = _actions.asSharedFlow()
 
     fun onAction(action: RegisterAction) {
         when (action) {
@@ -37,42 +39,56 @@ class RegisterViewModel(
             is RegisterAction.OnTipoSanguineoChange -> onTipoSanguineoChange(action.bloodType)
             RegisterAction.OnContinueClick -> onContinueClick()
             RegisterAction.OnRegisterClick -> onRegisterClick()
-//            RegisterAction.OnLaunch -> onLaunch()
-
         }
     }
-//
-//    private fun onLaunch() {
-//        loadEstados()
-//    }
+
+    init {
+        loadEstados()
+    }
+
+    private fun emitAction(action: RegisterAction) {
+        viewModelScope.launch {
+            _actions.emit(action)
+        }
+    }
 
     private fun registerUser(user: User) {
 
         firebaseAuthService.createUser(user) { success, error ->
             if (success) {
-                firebaseAuthService.signUpWithEmailAndPassword(user.email, user.password)
-                val userId = firebaseAuthService.getUserId()
-                user.id = userId
-                firebaseDatabaseService.addUser(user) { dbSuccess, error ->
-                    if (dbSuccess) {
-                        // Usuário criado com sucesso
+                firebaseAuthService.signUpWithEmailAndPassword(user.email, user.password) { success, error ->
+                    if (success) {
+                        val userId = firebaseAuthService.getUserId()
+                        user.id = userId
+                        firebaseDatabaseService.addUser(user) { dbSuccess, error ->
+                            if (dbSuccess) {
+                                // Usuário criado com sucesso
 
+                                _registerState.value = _registerState.value.copy(
+                                    message = "Usuário criado com sucesso!",
+                                    navigateToLogin = true,
+                                    navigateToHome = true,
+                                )
+                                emitAction(RegisterAction.OnRegisterClick)
+
+                            } else {
+                                _registerState.value = _registerState.value.copy(
+                                    message = "Erro ao criar usuário: ${error}"
+                                )
+                            }
+                        }
                         _registerState.value = _registerState.value.copy(
-                            message = "Usuário criado com sucesso!",
-                            navigateToLogin = true
-
+                            isLoggedIn = true
                         )
-                        onAction(RegisterAction.OnRegisterSuccess)
 
                     } else {
                         _registerState.value = _registerState.value.copy(
+                            isLoggedIn = false,
                             message = "Erro ao criar usuário: ${error}"
                         )
                     }
                 }
-                _registerState.value = _registerState.value.copy(
-                    isLoggedIn = true
-                )
+
             } else {
                 _registerState.value = _registerState.value.copy(
                     isLoggedIn = false,
@@ -80,7 +96,6 @@ class RegisterViewModel(
                 )
             }
         }
-
     }
 
 
@@ -88,7 +103,6 @@ class RegisterViewModel(
         viewModelScope.launch {
             val email = _registerState.value.email
             val password = _registerState.value.password
-            val confirmPassword = _registerState.value.passwordValid
             val name = _registerState.value.name
             val phone = _registerState.value.phone
             val estado = _registerState.value.estado
@@ -112,7 +126,6 @@ class RegisterViewModel(
                 registerUser(user)
                 _registerState.value = _registerState.value.copy(
                     isLoggedIn = true,
-
                     )
             } else {
                 _registerState.value = _registerState.value.copy(

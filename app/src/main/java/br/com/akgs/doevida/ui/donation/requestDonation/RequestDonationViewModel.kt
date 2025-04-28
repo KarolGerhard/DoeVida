@@ -6,7 +6,10 @@ import br.com.akgs.doevida.domain.usecases.ReadJsonUseCase
 import br.com.akgs.doevida.infra.remote.FirebaseAuthService
 import br.com.akgs.doevida.infra.remote.FirebaseDatabaseService
 import br.com.akgs.doevida.infra.remote.entities.RequestDonation
+import br.com.akgs.doevida.ui.login.LoginAction
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
@@ -19,13 +22,15 @@ class RequestDonationViewModel(
     private val _requestDonationState = MutableStateFlow(RequestDonationState())
     val requestDonationState = _requestDonationState.asStateFlow()
 
+    private val _actions = MutableSharedFlow<RequestDonationAction>()
+    val actions = _actions.asSharedFlow()
+
     val user = firebaseAuthService.currentUser().id
 
+
     init {
-//        getSolicitationsByCity(user?.state, user?.city)
         loadEstados()
     }
-
 
 
     fun onAction(action: RequestDonationAction) {
@@ -38,6 +43,12 @@ class RequestDonationViewModel(
             is RequestDonationAction.OnTipoSanguineoChange -> onTipoSanguineoChange(action.bloodType)
             is RequestDonationAction.OnTipoPedidoChange -> onTipoPedido(action.type)
             RequestDonationAction.OnSaveClick -> onRequestClick()
+        }
+    }
+
+    private fun emitAction(action: RequestDonationAction) {
+        viewModelScope.launch {
+            _actions.emit(action)
         }
     }
 
@@ -64,7 +75,7 @@ class RequestDonationViewModel(
                 bloodType = _requestDonationState.value.tipoSanguineo,
                 local = _requestDonationState.value.local,
                 userId = user,
-                status = "Pendente",
+                status = _requestDonationState.value.tipoPedido,
                 id = "",
             )
             firebaseDatabaseService.createRequestDonation(requestDonation) { success, error ->
@@ -76,7 +87,7 @@ class RequestDonationViewModel(
 
                         navigateToHome = true
                     )
-                    onAction(RequestDonationAction.OnSaveSuccess)
+                    emitAction(RequestDonationAction.OnSaveClick)
                 } else if (error != null) {
                     // Handle error
                     println("Erro ao criar solicitação: ${error}").toString()
@@ -85,25 +96,6 @@ class RequestDonationViewModel(
 //                )
                 } else {
                     // Handle error
-                }
-            }
-        }
-    }
-
-    private fun getSolicitationsByCity(state: String?, city: String?) {
-        if (state != null) {
-            if (city != null) {
-                firebaseDatabaseService.getSolicitationsByCity(state, city) { donations, error ->
-                    if (error != null) {
-                        // Handle error
-                        _requestDonationState.value = _requestDonationState.value.copy(
-                            solitacoes = donations ?: emptyList(),
-                        )
-                        println("Error fetching solicitations: $error")
-                    } else {
-                        // Handle success
-                        println("Solicitations fetched successfully: $donations")
-                    }
                 }
             }
         }

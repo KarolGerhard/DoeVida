@@ -13,5 +13,6 @@ data class LoginState(
     var errorMessage: String = "",
     var isSuccess: Boolean = false,
     var isLoginGoogle: Boolean = false,
-    var navigateToRegister: Boolean = false
+    var navigateToRegister: Boolean = false,
+    var navigateToHome: Boolean = false
 )

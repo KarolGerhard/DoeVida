@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -25,6 +24,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,6 +51,16 @@ fun RequestDonationScreen(
 
     val viewModel = koinViewModel<RequestDonationViewModel>()
     val state by viewModel.requestDonationState.collectAsState()
+
+    val actions = viewModel.actions
+
+    LaunchedEffect(Unit) {
+        actions.collect { action ->
+            onAction(action)
+        }
+    }
+
+
     val onAction = viewModel::onAction
     val scrollState = rememberScrollState()
 
@@ -154,7 +164,7 @@ fun RequestDonationScreen(
             ExposedDropdownMenuBox(
                 modifier = Modifier
                     .padding(2.dp)
-                    .width(200.dp)
+                    .fillMaxWidth()
                     .clip(RoundedCornerShape(10.dp)),
                 expanded = isDropdownExpanded,
                 onExpandedChange = {
@@ -216,7 +226,7 @@ fun RequestDonationScreen(
             ExposedDropdownMenuBox(
                 modifier = Modifier
                     .padding(2.dp)
-                    .width(200.dp)
+                    .fillMaxWidth()
                     .clip(RoundedCornerShape(10.dp)),
                 expanded = isDropdownTipoPedidoExpanded,
                 onExpandedChange = {
@@ -228,7 +238,7 @@ fun RequestDonationScreen(
                 ) {
                     TextField(
                         modifier = Modifier
-                            .menuAnchor(type = PrimaryEditable, enabled = true)
+                            .menuAnchor(type = PrimaryEditable, enabled = true).fillMaxWidth()
                             .fillMaxWidth(),
                         value = selectedTipoPedido,
                         onValueChange = { },
@@ -278,7 +288,7 @@ fun RequestDonationScreen(
             ExposedDropdownMenuBox(
                 modifier = Modifier
                     .padding(2.dp)
-                    .width(200.dp)
+                    .fillMaxWidth()
                     .clip(RoundedCornerShape(10.dp)),
                 expanded = isDropdownEstadoExpanded,
                 onExpandedChange = {
@@ -291,7 +301,7 @@ fun RequestDonationScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     TextField(
-                        modifier = Modifier.menuAnchor(PrimaryEditable, true),
+                        modifier = Modifier.menuAnchor(PrimaryEditable, true).fillMaxWidth(),
                         value = selectEstado,
                         onValueChange = { },
                         readOnly = true,
@@ -338,7 +348,7 @@ fun RequestDonationScreen(
             ExposedDropdownMenuBox(
                 modifier = Modifier
                     .padding(2.dp)
-                    .width(200.dp)
+                    .fillMaxWidth()
                     .clip(RoundedCornerShape(10.dp)),
                 expanded = isDropdownCidadeExpanded,
                 onExpandedChange = {
@@ -351,7 +361,7 @@ fun RequestDonationScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     TextField(
-                        modifier = Modifier.menuAnchor(),
+                        modifier = Modifier.menuAnchor().fillMaxWidth(),
                         value = selectCidade,
                         onValueChange = { },
                         readOnly = true,
@@ -390,7 +400,7 @@ fun RequestDonationScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp),
-                onClick = { onAction(RequestDonationAction.OnSaveClick) },
+                onClick = { viewModel.onAction(RequestDonationAction.OnSaveClick) },
                 colors = ButtonDefaults.buttonColors(
                     Color(0xFF690714),
                     contentColor = Color(0xFFFFFFFF)

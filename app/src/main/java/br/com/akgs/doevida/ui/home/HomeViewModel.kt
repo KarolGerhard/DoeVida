@@ -1,11 +1,16 @@
 package br.com.akgs.doevida.ui.home
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import br.com.akgs.doevida.domain.usecases.AuthUseCase
 import br.com.akgs.doevida.infra.remote.FirebaseAuthService
 import br.com.akgs.doevida.infra.remote.FirebaseDatabaseService
+import br.com.akgs.doevida.ui.login.LoginAction
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val authService: FirebaseAuthService,
@@ -15,12 +20,10 @@ class HomeViewModel(
     private val _uiState = MutableStateFlow(HomeState())
     val uiState = _uiState.asStateFlow()
 
+    private val _actions = MutableSharedFlow<HomeAction>()
+    val actions = _actions.asSharedFlow()
 
     val user = authService.currentUser()
-
-    init {
-        fetchUserData()
-    }
 
     fun onAction(action: HomeAction) {
         when (action) {
@@ -30,8 +33,18 @@ class HomeViewModel(
         }
     }
 
+    init {
+        fetchUserData()
+    }
+
+    private fun emitAction(action: HomeAction) {
+        viewModelScope.launch {
+            _actions.emit(action)
+        }
+    }
+
     private fun fetchUserData() {
-        val userId = authService.currentUser().id
+        val userId = authService.getUserId()
         firebaseDatabaseService.getUserById(userId) { user, error ->
             if (user != null) {
                 _uiState.value = _uiState.value.copy(
@@ -39,7 +52,6 @@ class HomeViewModel(
                 )
             }
         }
-
     }
 
 
@@ -51,7 +63,7 @@ class HomeViewModel(
         _uiState.value = _uiState.value.copy(
             navigateToSolicitation = true
         )
-
+        emitAction(HomeAction.NavigateToSolicitation)
     }
 
     private fun showError(message: String) {

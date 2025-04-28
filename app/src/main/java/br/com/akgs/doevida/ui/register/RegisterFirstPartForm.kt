@@ -89,8 +89,8 @@ fun RegisterFirstPartForm(
         )
         DateInputField(
             label = "Data de nascimento",
-            selectedDate = birthDate,
-            onDateSelected = { birthDate = it }
+            selectedDate = state.dataNasc,
+            onDateSelected = { onAction(RegisterAction.OnDataNascChange(it)) }
         )
         OutlinedTextField(
             value = state.phone,
@@ -116,7 +116,7 @@ fun RegisterFirstPartForm(
         ExposedDropdownMenuBox(
             modifier = Modifier
                 .padding(2.dp)
-                .width(200.dp)
+                .fillMaxWidth()
                 .clip(RoundedCornerShape(10.dp)),
             expanded = isDropdownExpanded,
             onExpandedChange = {
@@ -179,7 +179,7 @@ fun RegisterFirstPartForm(
         ExposedDropdownMenuBox(
             modifier = Modifier
                 .padding(2.dp)
-                .width(200.dp)
+                .fillMaxWidth()
                 .clip(RoundedCornerShape(10.dp)),
             expanded = isDropdownEstadoExpanded,
             onExpandedChange = {
@@ -192,7 +192,7 @@ fun RegisterFirstPartForm(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 TextField(
-                    modifier = Modifier.menuAnchor(PrimaryEditable, true),
+                    modifier = Modifier.menuAnchor(PrimaryEditable, true).fillMaxWidth(),
                     value = selectEstado,
                     onValueChange = { },
                     readOnly = true,
@@ -239,7 +239,7 @@ fun RegisterFirstPartForm(
         ExposedDropdownMenuBox(
             modifier = Modifier
                 .padding(2.dp)
-                .width(200.dp)
+                .fillMaxWidth()
                 .clip(RoundedCornerShape(10.dp)),
             expanded = isDropdownCidadeExpanded,
             onExpandedChange = {
@@ -252,7 +252,7 @@ fun RegisterFirstPartForm(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 TextField(
-                    modifier = Modifier.menuAnchor(),
+                    modifier = Modifier.menuAnchor().fillMaxWidth(),
                     value = selectCidade,
                     onValueChange = { },
                     readOnly = true,

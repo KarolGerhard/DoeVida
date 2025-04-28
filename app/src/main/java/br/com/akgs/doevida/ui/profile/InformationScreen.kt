@@ -15,6 +15,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,13 +27,19 @@ import androidx.compose.ui.unit.sp
 import br.com.akgs.doevida.infra.remote.entities.RequestDonation
 import br.com.akgs.doevida.infra.remote.entities.User
 import br.com.akgs.doevida.ui.donation.SolicitationAction
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InformationScreen(
 //    onAction: (SolicitationAction) -> Unit = {},
-    user: User
+//    user: User
 ) {
+    val viewModel = koinViewModel<ProfileViewModel>()
+    val user = viewModel.uiState.collectAsState().value
+
+
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -54,7 +61,7 @@ fun InformationScreen(
             Text(
                 modifier = Modifier
                     .padding(end = 8.dp),
-                text = user.bloodType ?: "",
+                text = viewModel.user.bloodType ?: "",
                 style = TextStyle(
                     color = Color(0xFF95313B),
                     fontSize = 16.sp,
@@ -73,7 +80,7 @@ fun InformationScreen(
             Text(
                 modifier = Modifier
                     .padding(end = 8.dp),
-                text = user.phone ?: "",
+                text = viewModel.user.phone ?: "",
                 style = TextStyle(
                     color = Color(0xFF95313B),
                     fontSize = 16.sp,
@@ -92,7 +99,7 @@ fun InformationScreen(
             Text(
                 modifier = Modifier
                     .padding(end = 8.dp),
-                text = user.email ?: "",
+                text = viewModel.user.email ?: "",
                 style = TextStyle(
                     color = Color(0xFF95313B),
                     fontSize = 16.sp,
@@ -111,7 +118,7 @@ fun InformationScreen(
             Text(
                 modifier = Modifier
                     .padding(end = 8.dp),
-                text = "${user.city} - ${user.state}",
+                text = "${viewModel.user.city} - ${viewModel.user.state}",
                 style = TextStyle(
                     color = Color(0xFF95313B),
                     fontSize = 16.sp,
@@ -128,12 +135,5 @@ fun InformationScreen(
 @Composable
 @Preview(showBackground = true)
 fun InformationScreePreview() {
-    InformationScreen(
-        user = User(
-            id = "1",
-            name = "Nome",
-            email = ""
-        )
-
-    )
+    InformationScreen()
 }

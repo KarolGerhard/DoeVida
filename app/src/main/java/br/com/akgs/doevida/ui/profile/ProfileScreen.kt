@@ -17,17 +17,33 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import br.com.akgs.doevida.infra.Routes
 import br.com.akgs.doevida.ui.login.LoginAction
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    onAction: (ProfileAction) -> Unit = {},
+) {
+    val viewModel = koinViewModel<ProfileViewModel>()
+    val actions = viewModel.actions
+
+    LaunchedEffect(Unit) {
+        actions.collect { action ->
+            onAction(action)
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -56,7 +72,8 @@ fun ProfileScreen() {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { },
+                    .clickable {
+                    },
                 colors = CardDefaults.cardColors(
                     containerColor = Color(0xFFFDFDFD)
                 ),
@@ -78,7 +95,8 @@ fun ProfileScreen() {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { },
+                    .clickable {
+                    },
                 colors = CardDefaults.cardColors(
                     containerColor = Color(0xFFFDFDFD)
                 ),
@@ -121,7 +139,11 @@ fun ProfileScreen() {
             }
             Spacer(modifier = Modifier.height(64.dp))
             Button(
-                onClick = { },
+                onClick = {
+                    onAction(
+                        ProfileAction.OnLougout
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp),
@@ -151,6 +173,8 @@ fun ProfileScreen() {
 @Composable
 @Preview(showBackground = true)
 fun ProfileScreenPreview() {
-    ProfileScreen()
+    ProfileScreen(
+        onAction = {}
+    )
 }
 
