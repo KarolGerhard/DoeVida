@@ -1,24 +1,24 @@
 package br.com.akgs.doevida.ui.util
 
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 
-class DateMaskVisualTransformation : VisualTransformation {
+class DateVisualTransformation : VisualTransformation {
     override fun filter(text: androidx.compose.ui.text.AnnotatedString): TransformedText {
         val trimmed = if (text.text.length >= 8) text.text.substring(0..7) else text.text
-        val masked = buildString {
-            for (i in trimmed.indices) {
-                when (i) {
-                    2, 4 -> append("/")
-                }
-                append(trimmed[i])
-            }
+        val out = StringBuilder()
+
+        for (i in trimmed.indices) {
+            out.append(trimmed[i])
+            if (i == 1 || i == 3) out.append("/")
         }
+
         val offsetMapping = object : OffsetMapping {
             override fun originalToTransformed(offset: Int): Int {
-                if (offset <= 2) return offset
-                if (offset <= 4) return offset + 1
+                if (offset <= 1) return offset
+                if (offset <= 3) return offset + 1
                 if (offset <= 8) return offset + 2
                 return 10
             }
@@ -30,6 +30,7 @@ class DateMaskVisualTransformation : VisualTransformation {
                 return 8
             }
         }
-        return TransformedText(androidx.compose.ui.text.AnnotatedString(masked), offsetMapping)
+
+        return TransformedText(AnnotatedString(out.toString()), offsetMapping)
     }
 }

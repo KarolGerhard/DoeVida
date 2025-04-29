@@ -4,8 +4,6 @@ data class LoginState(
     var email: String = "",
     var password: String = "",
     var passwordValid: String = "",
-    val onUserChange: (String) -> Unit = {},
-    val onPasswordChange: (String) -> Unit = {},
     val isShowPassword: Boolean = false,
     val onTogglePasswordVisibility: () -> Unit = {},
     val isLoggedIn: Boolean = false,

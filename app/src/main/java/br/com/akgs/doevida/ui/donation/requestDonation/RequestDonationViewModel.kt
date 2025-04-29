@@ -3,6 +3,7 @@ package br.com.akgs.doevida.ui.donation.requestDonation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.akgs.doevida.domain.usecases.ReadJsonUseCase
+import br.com.akgs.doevida.infra.NotificationManager
 import br.com.akgs.doevida.infra.remote.FirebaseAuthService
 import br.com.akgs.doevida.infra.remote.FirebaseDatabaseService
 import br.com.akgs.doevida.infra.remote.entities.RequestDonation
@@ -17,6 +18,7 @@ class RequestDonationViewModel(
     private val readJsonUseCase: ReadJsonUseCase,
     private val firebaseDatabaseService: FirebaseDatabaseService,
     private val firebaseAuthService: FirebaseAuthService,
+    private val notificationManager: NotificationManager
 
     ) : ViewModel() {
     private val _requestDonationState = MutableStateFlow(RequestDonationState())
@@ -51,6 +53,8 @@ class RequestDonationViewModel(
             _actions.emit(action)
         }
     }
+
+
 
     private fun onTipoPedido(type: String) {
         _requestDonationState.value = _requestDonationState.value.copy(
@@ -87,7 +91,13 @@ class RequestDonationViewModel(
 
                         navigateToHome = true
                     )
+
                     emitAction(RequestDonationAction.OnSaveClick)
+                    notificationManager.sendNotification(
+                        bloodType = requestDonation.bloodType,
+                        title = "Solicitação de doação",
+                        message = "Há uma nova solicitação para o tipo sanguíneo ${requestDonation.bloodType}."
+                    )
                 } else if (error != null) {
                     // Handle error
                     println("Erro ao criar solicitação: ${error}").toString()

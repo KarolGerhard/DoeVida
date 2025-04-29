@@ -72,7 +72,7 @@ class LoginViewModel(
         val password = _uiState.value.password
 
         if (email.isNotEmpty() && password.isNotEmpty()) {
-            authService.signUpWithEmailAndPassword(email, password) { success, error ->
+            authService.signInWithEmailAndPassword(email, password) { success, error ->
                 if (success) {
                     _uiState.value = _uiState.value.copy(
                         isLoggedIn = true

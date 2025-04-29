@@ -10,5 +10,5 @@ data class SolicitationsState (
     var error: String? = null,
     val showDetails: Boolean = false,
     val tiposSanguineosCompativeis: List<String> = emptyList(),
-    val donationAccepted: Donation? = null,
+    val donationAccepted: RequestDonation? = null,
 )

@@ -1,6 +1,7 @@
 package br.com.akgs.doevida.ui.donation
 
 import br.com.akgs.doevida.infra.remote.entities.RequestDonation
+import br.com.akgs.doevida.ui.profile.ProfileAction
 
 interface SolicitationAction {
     data object OnLaunch: SolicitationAction
@@ -8,4 +9,5 @@ interface SolicitationAction {
     data object OnDismiss : SolicitationAction
     data object OnShowDetails : SolicitationAction
     data class OnSelectItem(val type: String) : SolicitationAction
+    data object OnBackClick : SolicitationAction
 }

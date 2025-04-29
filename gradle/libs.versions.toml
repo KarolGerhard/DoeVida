@@ -21,6 +21,8 @@ kotlinx-coroutines = "1.7.3"
 material3Lint = "1.4.0-alpha12"
 materialIconsExtended = "1.6.6"
 coreSplashscreen = "1.0.1"
+roomRuntimeAndroid = "2.7.1"
+firebaseMessagingKtx = "24.1.1"
 
 
 [libraries]
@@ -52,6 +54,8 @@ play-services-auth = { group = "com.google.android.gms", name = "play-services-a
 kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "kotlinx-coroutines" }
 androidx-material3-lint = { group = "androidx.compose.material3", name = "material3-lint", version.ref = "material3Lint" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
+firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

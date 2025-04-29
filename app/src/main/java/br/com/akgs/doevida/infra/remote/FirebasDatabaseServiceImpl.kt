@@ -95,13 +95,9 @@ class FirebasDatabaseServiceImpl : FirebaseDatabaseService {
             }
     }
 
-    override fun getDonation(donation: String) {
-        firestore.collection("SOLICITACOES").document(donation).get()
-    }
-
-    override fun updateDonation(requestDonationId: String, requestDonationStatus: String, onComplete: (Boolean, String?) -> Unit) {
-        firestore.collection("SOLICITACOES").document(requestDonationId)
-            .update("status", requestDonationStatus)
+    override fun updateDonation(donationId: String, donationLocal: String, donationDate: String, onComplete: (Boolean, String?) -> Unit) {
+        firestore.collection("DONATION").document(donationId)
+            .update("localDonation", donationLocal, "dateDonation", donationDate)
             .addOnSuccessListener {
                 onComplete(true, null)
             }
@@ -110,25 +106,57 @@ class FirebasDatabaseServiceImpl : FirebaseDatabaseService {
             }
     }
 
-    override fun deleteDonation(requestDonation: RequestDonation) {
-        firestore.collection("SOLICITACOES").document(requestDonation.id).delete()
-    }
-
-    override fun getUserSolicitations(userId: String): ArrayList<RequestDonation> {
-        val requestDonations = ArrayList<RequestDonation>()
-        firestore.collection("SOLICITACOES")
+    override fun getDonationsByUser(userId: String, onComplete: (List<Donation>?, String?) -> Unit) {
+        firestore.collection("DONATION")
             .whereEqualTo("userId", userId)
             .get()
             .addOnSuccessListener { result ->
-                for (document in result) {
-                    val requestDonation = document.toObject(RequestDonation::class.java)
-                    requestDonations.add(requestDonation)
+                val donations = result.map { document ->
+                    Donation(
+                        id = document.id,
+                        userId = document.getString("userId") ?: "",
+                        localDonation = document.getString("localDonation") ?: "",
+                        dateDonation = document.getString("dateDonation") ?: ""
+                    )
+                }
+                onComplete(donations, null)
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting donations by user", exception)
+                onComplete(null, exception.message)
+            }
+    }
+
+
+    override fun getAcceptedDonationsByUser(userId: String, onComplete: (RequestDonation?, String?) -> Unit) {
+        firestore.collection("REQUEST_DONATION")
+            .whereEqualTo("userId", userId)
+            .whereEqualTo("status", "Aceito")
+            .get()
+            .addOnSuccessListener { result ->
+                if (result.isEmpty) {
+                    onComplete(null, null)
+                } else {
+                    val requestDonation = result.documents.map {
+                        RequestDonation(
+                            id = it.id,
+                            userId = it.getString("userId") ?: "",
+                            name = it.getString("name"),
+                            phone = it.getString("phone"),
+                            bloodType = it.getString("bloodType") ?: "",
+                            city = it.getString("city") ?: "",
+                            state = it.getString("state") ?: "",
+                            status = it.getString("status") ?: "",
+                            local = it.getString("local") ?: ""
+                        )
+                    }
+                    onComplete(requestDonation.last(), null)
                 }
             }
             .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting user solicitations", exception)
+                Log.w(TAG, "Error getting accepted donations by user", exception)
+                onComplete(null, exception.message)
             }
-        return requestDonations
     }
 
     override fun getSolicitationsByCity(state: String, city: String, onComplete: (List<RequestDonation>?, String?) -> Unit) {
@@ -158,5 +186,26 @@ class FirebasDatabaseServiceImpl : FirebaseDatabaseService {
                 onComplete(null, exception.message)
             }
     }
+
+    override fun sendNotification(topic: String, title: String, body: String, onComplete: (Boolean, String?) -> Unit) {
+            val notificationData = mapOf(
+                "to" to "/topics/$topic",
+                "notification" to mapOf(
+                    "title" to title,
+                    "body" to body
+                )
+            )
+
+            // Simulação de envio de notificação (substitua por uma chamada HTTP real se necessário)
+            firestore.collection("NOTIFICATIONS").add(notificationData)
+                .addOnSuccessListener {
+                    onComplete(true, null)
+                }
+                .addOnFailureListener { e ->
+                    onComplete(false, e.message)
+                }
+        }
+
+
 
 }

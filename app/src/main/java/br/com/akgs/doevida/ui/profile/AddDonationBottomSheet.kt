@@ -26,31 +26,27 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import br.com.akgs.doevida.infra.remote.entities.Donation
-import br.com.akgs.doevida.infra.remote.entities.RequestDonation
-import br.com.akgs.doevida.ui.donation.SolicitationAction
-import br.com.akgs.doevida.ui.register.RegisterAction
-import br.com.akgs.doevida.ui.util.PhoneMaskVisualTransformation
+import br.com.akgs.doevida.ui.util.DateVisualTransformation
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddDonationBottomSheet(
-    onAction: (ProfileAction) -> Unit = {},
-    showAdd: Boolean
+    state: MyDonationState,
+    onAction: (MyDonationAction) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
 
-    if (showAdd) {
+    if (state.showAddDonation) {
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-//            ModalBottomSheet(
-//                onDismissRequest = { onAction(SolicitationAction.OnDismiss) },
-//                sheetState = sheetState
-//            ) {
+            ModalBottomSheet(
+                onDismissRequest = { onAction(MyDonationAction.OnDismiss) },
+                sheetState = sheetState
+            ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -58,20 +54,29 @@ fun AddDonationBottomSheet(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     OutlinedTextField(
-                        value = "11/11/11",
-                        onValueChange = {  },
+                        value = state.date,
+                        onValueChange = { newValue ->
+                            if (newValue.length <= 8 && newValue.all { it.isDigit() }) {
+                                onAction(MyDonationAction.OnDateChange(newValue))
+                            }
+                        },
                         label = { Text("Data da coleta") },
                         modifier = Modifier.fillMaxWidth(),
+                        visualTransformation = DateVisualTransformation(),
                         keyboardActions = KeyboardActions(
                             onDone = {
                                 defaultKeyboardAction(ImeAction.Next)
                             }
                         ),
+                        placeholder = { Text("DD/MM/AAAA") },
+                        singleLine = true
                     )
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
                     OutlinedTextField(
-                        value = "Hospital gonçalves",
-                        onValueChange = {  },
+                        value = state.local,
+                        onValueChange = {
+                            onAction(MyDonationAction.OnLocalChange(it))
+                        },
                         label = { Text("Local da doação") },
                         modifier = Modifier.fillMaxWidth(),
                         keyboardActions = KeyboardActions(
@@ -83,7 +88,7 @@ fun AddDonationBottomSheet(
                     Spacer(modifier = Modifier.height(24.dp))
                     Button(
                         onClick = {
-                            onAction(ProfileAction.OnSave(donation = Donation()))
+                            onAction(MyDonationAction.OnSaveDonation)
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -104,9 +109,10 @@ fun AddDonationBottomSheet(
                         )
                     }
                 }
-//            }
+            }
         }
     }
+
 
 }
 
@@ -116,7 +122,13 @@ fun AddDonationBottomSheetPreview() {
     MaterialTheme {
         AddDonationBottomSheet(
             onAction = {},
-            showAdd = true
+            state = MyDonationState(
+                showAddDonation = true,
+                local = "",
+                date = "",
+                isLoading = false,
+                error = null
+            )
         )
     }
 }

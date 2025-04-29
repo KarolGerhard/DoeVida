@@ -102,7 +102,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = state.email,
                 onValueChange = {
-                    onAction(LoginAction.OnEmailChange(it))
+                   viewModel.onAction(LoginAction.OnEmailChange(it))
                 },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
@@ -116,7 +116,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
                 value = state.password,
-                onValueChange = {onAction(LoginAction.OnPasswordChange(it))},
+                onValueChange = {viewModel.onAction(LoginAction.OnPasswordChange(it))},
                 label = { Text("Password") },
                 modifier = Modifier
                     .fillMaxWidth()

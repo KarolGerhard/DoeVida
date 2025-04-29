@@ -73,6 +73,9 @@ fun ProfileScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
+                        viewModel.onAction(
+                            ProfileAction.NavigateToInformacion
+                        )
                     },
                 colors = CardDefaults.cardColors(
                     containerColor = Color(0xFFFDFDFD)
@@ -96,6 +99,9 @@ fun ProfileScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
+                        viewModel.onAction(
+                            ProfileAction.NavigateToMyDonation
+                        )
                     },
                 colors = CardDefaults.cardColors(
                     containerColor = Color(0xFFFDFDFD)
@@ -140,7 +146,7 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(64.dp))
             Button(
                 onClick = {
-                    onAction(
+                    viewModel.onAction(
                         ProfileAction.OnLougout
                     )
                 },

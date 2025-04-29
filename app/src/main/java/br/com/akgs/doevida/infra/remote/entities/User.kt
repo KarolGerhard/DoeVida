@@ -1,6 +1,6 @@
 package br.com.akgs.doevida.infra.remote.entities
 
-class User(
+data class User(
     var id: String,
     var name: String = "",
     var email: String = "",

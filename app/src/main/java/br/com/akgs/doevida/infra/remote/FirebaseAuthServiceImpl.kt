@@ -9,6 +9,7 @@ class FirebaseAuthServiceImpl : FirebaseAuthService {
 
     private var auth = FirebaseAuth.getInstance()
 
+
     override fun createUser(user: User, onComplete: (Boolean, String?) -> Unit) {
         auth.createUserWithEmailAndPassword(user.email, user.password)
             .addOnCompleteListener { task ->
@@ -54,6 +55,21 @@ class FirebaseAuthServiceImpl : FirebaseAuthService {
     }
 
     override fun signUpWithEmailAndPassword(
+        email: String,
+        password: String, onComplete: (Boolean, String?) -> Unit
+    ) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val userId = task.result?.user?.uid
+                    onComplete(true, userId)
+                } else {
+                    onComplete(false, task.exception?.message)
+                }
+            }
+    }
+
+    override fun signInWithEmailAndPassword(
         email: String,
         password: String, onComplete: (Boolean, String?) -> Unit
     ) {

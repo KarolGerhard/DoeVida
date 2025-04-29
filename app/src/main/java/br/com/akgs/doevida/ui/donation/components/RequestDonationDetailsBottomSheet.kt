@@ -24,14 +24,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.akgs.doevida.infra.remote.entities.RequestDonation
-import br.com.akgs.doevida.ui.donation.SolicitationAction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RequesetDonationDetailsBottomSheet(
-    onAction: (SolicitationAction) -> Unit = {},
+    onAccepted: () -> Unit,
+    onDismiss: () -> Unit,
     tiposSanguineo: List<String>,
-   requestDonation: RequestDonation,
+    requestDonation: RequestDonation,
     showDetails: Boolean
 ) {
     val sheetState = rememberModalBottomSheetState(
@@ -44,7 +44,7 @@ fun RequesetDonationDetailsBottomSheet(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             ModalBottomSheet(
-                onDismissRequest = { onAction(SolicitationAction.OnDismiss) },
+                onDismissRequest = onDismiss,
                 sheetState = sheetState
             ) {
                 Column(
@@ -112,7 +112,8 @@ fun RequesetDonationDetailsBottomSheet(
                     Spacer(modifier = Modifier.height(24.dp))
                     Button(
                         onClick = {
-                            onAction(SolicitationAction.OnAccepted(requestDonation))
+                            onAccepted()
+                            onDismiss()
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -144,7 +145,6 @@ fun RequesetDonationDetailsBottomSheet(
 fun RequestDonationDetailsBottomSheetPreview() {
     MaterialTheme {
         RequesetDonationDetailsBottomSheet(
-            onAction = {},
             tiposSanguineo = listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"),
             requestDonation = RequestDonation(
                 id = "1",
@@ -157,7 +157,9 @@ fun RequestDonationDetailsBottomSheetPreview() {
                 bloodType = "A+",
                 status = "Pendente"
             ),
-            showDetails = true
+            showDetails = true,
+            onAccepted = {},
+            onDismiss = {}
         )
     }
 }

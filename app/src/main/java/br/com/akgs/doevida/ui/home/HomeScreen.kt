@@ -24,6 +24,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,6 +44,8 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreen(onAction: (HomeAction) -> Unit,) {
 
     val viewModel = koinViewModel<HomeViewModel>()
+    val state by viewModel.uiState.collectAsState()
+    val user = state.user
 
     val actions = viewModel.actions
 
@@ -74,7 +78,7 @@ fun HomeScreen(onAction: (HomeAction) -> Unit,) {
                     Column {
                         Text("Olá", style = TextStyle(color = Color.White, fontSize = 24.sp))
                         Text(
-                            viewModel.uiState.value.user?.name ?: "",
+                            user?.name ?: "",
                             style = TextStyle(color = Color.White, fontSize = 18.sp)
                         )
                     }
@@ -141,7 +145,7 @@ fun HomeScreen(onAction: (HomeAction) -> Unit,) {
                                     )
                                 )
                                 Text(
-                                    text = viewModel.uiState.value.user?.bloodType ?: "",
+                                    text = user?.bloodType ?: "",
                                     modifier = Modifier.padding(top = 14.dp),
                                     style = TextStyle(
                                         color = Color(0xFFBE1E2D),
@@ -193,7 +197,7 @@ fun HomeScreen(onAction: (HomeAction) -> Unit,) {
                                     )
                                 )
                                 Text(
-                                    text = "3",
+                                    text = state.donationsCount.toString(),
                                     modifier = Modifier.padding(top = 14.dp),
                                     style = TextStyle(
                                         color = Color(0xFFBE1E2D),
@@ -212,60 +216,60 @@ fun HomeScreen(onAction: (HomeAction) -> Unit,) {
                         }
                     }
                 }
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 24.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFFFFDEE1)
-                    ),
-                    shape = RoundedCornerShape(8.dp),
-                    border = BorderStroke(1.dp, Color(0xFF95313B))
-                ) {
-                    Row(
-                        modifier = Modifier.padding(12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_calendar),
-                            contentDescription = "Blood Donation",
-                            modifier = Modifier.size(36.dp),
-                            tint = Color(0x8C95313B)
-                        )
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 8.dp),
-                            verticalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Text(
-                                text = "Próxima doação",
-                                style = TextStyle(
-                                    color = Color(0xFF613338),
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                )
-                            )
-                            Text(
-                                text = "Janeiro",
-                                style = TextStyle(
-                                    color = Color(0xFF95313B),
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                )
-                            )
-                            Text(
-                                text = "Você não está apto, aguarde o tempo correto.",
-                                style = TextStyle(
-                                    color = Color(0xFF613338),
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                )
-                            )
-                        }
-                    }
-                }
+//                Card(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(top = 24.dp),
+//                    colors = CardDefaults.cardColors(
+//                        containerColor = Color(0xFFFFDEE1)
+//                    ),
+//                    shape = RoundedCornerShape(8.dp),
+//                    border = BorderStroke(1.dp, Color(0xFF95313B))
+//                ) {
+//                    Row(
+//                        modifier = Modifier.padding(12.dp),
+//                        verticalAlignment = Alignment.CenterVertically,
+//                        horizontalArrangement = Arrangement.SpaceBetween
+//                    ) {
+//                        Icon(
+//                            painter = painterResource(id = R.drawable.ic_calendar),
+//                            contentDescription = "Blood Donation",
+//                            modifier = Modifier.size(36.dp),
+//                            tint = Color(0x8C95313B)
+//                        )
+//                        Column(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .padding(start = 8.dp),
+//                            verticalArrangement = Arrangement.spacedBy(4.dp)
+//                        ) {
+//                            Text(
+//                                text = "Próxima doação",
+//                                style = TextStyle(
+//                                    color = Color(0xFF613338),
+//                                    fontSize = 18.sp,
+//                                    fontWeight = FontWeight.SemiBold,
+//                                )
+//                            )
+//                            Text(
+//                                text = "Janeiro",
+//                                style = TextStyle(
+//                                    color = Color(0xFF95313B),
+//                                    fontSize = 16.sp,
+//                                    fontWeight = FontWeight.SemiBold,
+//                                )
+//                            )
+//                            Text(
+//                                text = "Você não está apto, aguarde o tempo correto.",
+//                                style = TextStyle(
+//                                    color = Color(0xFF613338),
+//                                    fontSize = 14.sp,
+//                                    fontWeight = FontWeight.SemiBold,
+//                                )
+//                            )
+//                        }
+//                    }
+//                }
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 8.dp),
                     color = Color(0x3395313B),
@@ -312,41 +316,41 @@ fun HomeScreen(onAction: (HomeAction) -> Unit,) {
                         )
                     }
                 }
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFFFDFDFD)
-                    ),
-                    shape = RoundedCornerShape(8.dp),
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(90.dp)
-                            .padding(start = 12.dp),
-                        horizontalArrangement = Arrangement.Start,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_hospital),
-                            contentDescription = "Blood Donation",
-                            modifier = Modifier.size(36.dp),
-
-                            tint = Color(0xFF95313B)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "Encontrar Hemocentros",
-                            style = TextStyle(
-                                color = Color(0xFF95313B),
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.SemiBold,
-                            )
-                        )
-                    }
-                }
+//                Card(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(top = 16.dp),
+//                    colors = CardDefaults.cardColors(
+//                        containerColor = Color(0xFFFDFDFD)
+//                    ),
+//                    shape = RoundedCornerShape(8.dp),
+//                ) {
+//                    Row(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .height(90.dp)
+//                            .padding(start = 12.dp),
+//                        horizontalArrangement = Arrangement.Start,
+//                        verticalAlignment = Alignment.CenterVertically,
+//                    ) {
+//                        Icon(
+//                            painter = painterResource(id = R.drawable.ic_hospital),
+//                            contentDescription = "Blood Donation",
+//                            modifier = Modifier.size(36.dp),
+//
+//                            tint = Color(0xFF95313B)
+//                        )
+//                        Spacer(modifier = Modifier.width(8.dp))
+//                        Text(
+//                            text = "Encontrar Hemocentros",
+//                            style = TextStyle(
+//                                color = Color(0xFF95313B),
+//                                fontSize = 20.sp,
+//                                fontWeight = FontWeight.SemiBold,
+//                            )
+//                        )
+//                    }
+//                }
 
 
             }

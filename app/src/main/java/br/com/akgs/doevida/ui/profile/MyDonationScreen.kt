@@ -22,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold
@@ -48,182 +49,172 @@ import br.com.akgs.doevida.infra.remote.entities.RequestDonation
 import br.com.akgs.doevida.ui.donation.components.RequesetDonationDetailsBottomSheet
 import br.com.akgs.doevida.ui.enums.SolicitationState
 import br.com.akgs.doevida.ui.home.HomeAction
+import br.com.akgs.doevida.ui.navigation.TopAppBar
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions.Builder
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions.DEFAULT_SIGN_IN
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun MyDonationScreen(){
-    val viewModel = koinViewModel<ProfileViewModel>()
+fun MyDonationScreen(
+    onAction: (MyDonationAction)-> Unit = {},
+){
 
-//    val donationState by viewModel.donationState.collectAsState()
-    var selectedSolicitation by remember { mutableStateOf<RequestDonation>(
-        RequestDonation(
-            id = "",
-            userId = "",
-            name = "",
-            phone = "",
-            local = "",
-            state = "",
-            city = "",
-            bloodType = "",
-            status = ""
-        )
-    ) }
+    val viewModel = koinViewModel<MyDonationViewModel>()
+    val state by viewModel.uiState.collectAsState()
 
-//    LaunchedEffect(donationState.solitacoes) {
-//        viewModel.onAction(SolicitationAction.OnLaunch)
-//    }
+    val actions = viewModel.actions
+
+    LaunchedEffect(Unit) {
+        actions.collect { action ->
+            onAction(action)
+        }
+    }
 
     Scaffold(
         topBar = {
-            NavigationBar(
-                containerColor = Color(0xFF95313B),
-                modifier = androidx.compose.ui.Modifier
-                    .fillMaxWidth()
-                    .clickable { /* Handle click */ }
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_arrow_back),
-                    contentDescription = "Pedidos de doações",
-                    tint = Color.White,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .size(20.dp),
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Pedidos de doações",
-                    style = TextStyle(
-                        color = Color.White,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Normal,
-                    ),
-                )
-
+            TopAppBar("Minhas doações") {
+                viewModel.onAction(MyDonationAction.OnBackClick)
             }
         },
         bottomBar = {
             AddDonationBottomSheet(
-                showAdd = false,
+                state = state,
+                onAction = { viewModel.onAction(it) }
             )
         },
-    ) {paddingValues ->
-        Column (
-            modifier = androidx.compose.ui.Modifier
-                .padding(paddingValues)
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
                 .fillMaxSize()
+                .padding(paddingValues)
         ) {
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
+            Column(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .padding(16.dp),
-                text = "Realizadas",
-                style = TextStyle(
-                    color = Color(0xFF95313B),
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold,
-                )
-            )
-            LazyColumn(
-                modifier = Modifier
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                val items = listOf<Donation>(
-                    Donation(
-                        userId = "",
-                        donationAccepted = RequestDonation(
-                            id = "",
-                            userId = "",
-                            name = "",
-                            phone = "",
-                            local = "",
-                            state = "",
-                            city = "",
-                            bloodType = "",
-                            status = ""
-                        )
-                    ),
-                    Donation(
-                        userId = "",
-                        donationAccepted = RequestDonation(
-                            id = "",
-                            userId = "",
-                            name = "",
-                            phone = "",
-                            local = "",
-                            state = "",
-                            city = "",
-                            bloodType = "",
-                            status = ""
-                        )
-                    ),
+                Text(
+                    text = "Aceita",
+                    style = TextStyle(
+                        color = Color(0xFF95313B),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 )
-                itemsIndexed(items) { _, it ->
-                    Card(
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFFFFDEE1)
+                    ),
+                    shape = RoundedCornerShape(8.dp),
+                    border = BorderStroke(1.dp, Color(0xFF95313B))
+                ) {
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {
-
-                            },
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color(0xFFFCEEEF)
-                        ),
-                        shape = RoundedCornerShape(8.dp),
+                            .padding(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        Column (
+                        InfoField(
+                            label = "Nome paciente",
+                            value = state.donation?.name ?: "-"
+                        )
+                        InfoField(
+                            label = "Tipo Sanguineo",
+                            value = state.donation?.bloodType ?: "-"
+                        )
+                        InfoField(
+                            label = "Telefone",
+                            value = state.donation?.phone ?: "-"
+                        )
+                        InfoField(
+                            label = "Local Internação",
+                            value = state.donation?.local ?: "-"
+                        )
+
+                    }
+                }
+                HorizontalDivider(modifier = Modifier.padding(8.dp))
+                Spacer(modifier = Modifier.height(18.dp))
+                Text(
+                    text = "Realizadas",
+                    style = TextStyle(
+                        color = Color(0xFF95313B),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                )
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    val items = state.donations
+                    itemsIndexed(items) { _, it ->
+                        Card(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
+                                .clickable {
+
+                                },
+                            colors = CardDefaults.cardColors(
+                                containerColor = Color(0xFFFCEEEF)
+                            ),
+                            shape = RoundedCornerShape(8.dp),
                         ) {
-                            Text(
+                            Column(
                                 modifier = Modifier
-                                    .padding(end = 8.dp),
-                                text = "11/01/2025",
-                                style = TextStyle(
-                                    color = Color(0xFF95313B),
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.SemiBold,
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                            ) {
+                                Text(
+                                    modifier = Modifier
+                                        .padding(end = 8.dp),
+                                    text = it.dateDonation,
+                                    style = TextStyle(
+                                        color = Color(0xFF95313B),
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                    )
                                 )
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(
-                                text = "Local: opop",
-//                                text = "Local: ${it.local}",
-                                style = TextStyle(
-                                    color = Color(0xFF95313B),
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.Normal,
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = "Local: ${it.localDonation}",
+                                    style = TextStyle(
+                                        color = Color(0xFF95313B),
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Normal,
+                                    )
                                 )
-                            )
+                            }
                         }
                     }
                 }
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(
-                onClick = {},
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                shape = RoundedCornerShape(24.dp),
-                colors = ButtonDefaults.buttonColors(
-                    Color(0xFFFFDEE1),
-                    contentColor = Color(0xFF000000)
-                ),
-                border = BorderStroke(1.dp, Color(0xFF95313B))
-            ) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(
+                    onClick = {
+                        viewModel.onAction(MyDonationAction.OnShowAdd)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    shape = RoundedCornerShape(24.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        Color(0xFFFFDEE1),
+                        contentColor = Color(0xFF000000)
+                    ),
+                    border = BorderStroke(1.dp, Color(0xFF95313B))
+                ) {
 
-                Text(
-                    text = "Registrar doação",
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium
+                    Text(
+                        text = "Registrar doação",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium
+                        )
                     )
-                )
+                }
             }
         }
     }
@@ -233,5 +224,6 @@ fun MyDonationScreen(){
 @Composable
 fun MyDonationScreenPreview() {
     MyDonationScreen(
+        onAction = {}
     )
 }

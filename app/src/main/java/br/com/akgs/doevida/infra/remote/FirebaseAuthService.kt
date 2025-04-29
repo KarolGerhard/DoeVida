@@ -10,4 +10,9 @@ interface FirebaseAuthService {
     fun currentUser(): User
     fun getUserId(): String
     fun signOut()
+    fun signInWithEmailAndPassword(
+        email: String,
+        password: String,
+        onComplete: (Boolean, String?) -> Unit
+    )
 }

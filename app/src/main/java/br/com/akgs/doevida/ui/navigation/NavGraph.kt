@@ -5,12 +5,17 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import br.com.akgs.doevida.ui.donation.SolicitationAction
+import br.com.akgs.doevida.ui.donation.SolicitationScreen
 import br.com.akgs.doevida.ui.donation.requestDonation.RequestDonationAction
 import br.com.akgs.doevida.ui.donation.requestDonation.RequestDonationScreen
 import br.com.akgs.doevida.ui.home.HomeAction
 import br.com.akgs.doevida.ui.home.HomeScreen
 import br.com.akgs.doevida.ui.login.LoginAction
 import br.com.akgs.doevida.ui.login.LoginScreen
+import br.com.akgs.doevida.ui.profile.InformationScreen
+import br.com.akgs.doevida.ui.profile.MyDonationAction
+import br.com.akgs.doevida.ui.profile.MyDonationScreen
 import br.com.akgs.doevida.ui.profile.ProfileAction
 import br.com.akgs.doevida.ui.profile.ProfileScreen
 import br.com.akgs.doevida.ui.register.RegisterAction
@@ -125,9 +130,62 @@ fun NavGraph(
                         }
                         is ProfileAction.OnLougout -> {
                             navController.navigate(Screen.Login.route) {
-                                popUpTo(Screen.Home.route) { inclusive = true }
+                                popUpTo(Screen.Profile.route) { inclusive = true }
                             }
                         }
+                        is ProfileAction.NavigateToInformacion -> {
+                            navController.navigate(Screen.Information.route)
+                        }
+                        is ProfileAction.NavigateToMyDonation -> {
+                            navController.navigate(Screen.MyDonation.route)
+                        }
+
+                        else -> {
+                            // Handle other actions if needed
+                        }
+                    }
+                }
+            )
+        }
+        composable(Screen.Solicitation.route){
+            SolicitationScreen(
+                onAction = { action ->
+                    when (action) {
+                        is SolicitationAction.OnBackClick -> {
+                            navController.popBackStack()
+                        }
+
+                        else -> {
+                            // Handle other actions if needed
+                        }
+                    }
+                }
+            )
+        }
+        composable(Screen.Information.route){
+            InformationScreen(
+                onAction = { action ->
+                    when (action) {
+                        is ProfileAction.OnBackClick -> {
+                            navController.popBackStack()
+                        }
+
+                        else -> {
+                            // Handle other actions if needed
+                        }
+                    }
+                }
+            )
+        }
+        composable(Screen.MyDonation.route){
+            MyDonationScreen(
+                onAction = { action ->
+                    when (action) {
+                        is MyDonationAction.OnBackClick -> {
+                            navController.popBackStack()
+                        }
+
+
 
                         else -> {
                             // Handle other actions if needed

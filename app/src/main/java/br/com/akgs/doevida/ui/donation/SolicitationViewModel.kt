@@ -2,14 +2,17 @@ package br.com.akgs.doevida.ui.donation
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import br.com.akgs.doevida.domain.usecases.DonationUseCase
 import br.com.akgs.doevida.infra.remote.FirebaseAuthService
 import br.com.akgs.doevida.infra.remote.FirebaseDatabaseService
-import br.com.akgs.doevida.infra.remote.entities.Donation
 import br.com.akgs.doevida.infra.remote.entities.RequestDonation
-import br.com.akgs.doevida.infra.remote.entities.User
+import br.com.akgs.doevida.ui.profile.ProfileAction
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class SolicitationViewModel(
     private val firebaseDatabaseService: FirebaseDatabaseService,
@@ -20,6 +23,10 @@ class SolicitationViewModel(
     private val _donationState = MutableStateFlow(SolicitationsState())
     val donationState = _donationState.asStateFlow()
 
+    private val _actions = MutableSharedFlow<SolicitationAction>()
+    val actions = _actions.asSharedFlow()
+
+    val user = firebaseAuthService.currentUser()
 
     fun onAction(action: SolicitationAction) {
         when (action) {
@@ -33,8 +40,19 @@ class SolicitationViewModel(
             }
 //            is SolicitationAction.OnShowDetails -> onShowDetails()
             is SolicitationAction.OnSelectItem -> onSelectItem(action.type)
+            SolicitationAction.OnBackClick -> onBack()
 
         }
+    }
+
+    private fun emitAction(action: SolicitationAction) {
+        viewModelScope.launch {
+            _actions.emit(action)
+        }
+    }
+
+    private fun onBack() {
+        emitAction(SolicitationAction.OnBackClick)
     }
 
     private fun onSelectItem(type: String) {
@@ -45,31 +63,29 @@ class SolicitationViewModel(
     }
 
 
-
     private fun onAccepted(requestDonation: RequestDonation) {
-       val donation = Donation(
-           userId = _donationState.value.donationAccepted?.userId ?: "",
-           donationAccepted = RequestDonation(
-                id = requestDonation.id,
-                userId = requestDonation.userId,
-                name = requestDonation.name,
-                phone = requestDonation.phone,
-                local =  requestDonation.local,
-                state = requestDonation.state,
-                city = requestDonation.city,
-                bloodType = requestDonation.bloodType,
-                status = "Aceito",
-           ),
-           dateDoation = ""
+        val requestDonation = RequestDonation(
+            id = requestDonation.id,
+            userId = user.id,
+            name = requestDonation.name,
+            phone = requestDonation.phone,
+            local = requestDonation.local,
+            state = requestDonation.state,
+            city = requestDonation.city,
+            bloodType = requestDonation.bloodType,
+            status = "Aceito",
         )
-        firebaseDatabaseService.createDonation(donation) { success, error ->
+        firebaseDatabaseService.updateRequestDonation(
+            requestDonation.id,
+            requestDonation.status
+        ) { success, error ->
             if (success) {
                 Log.d("SolicitationViewModel", "Donation created successfully")
                 _donationState.value = _donationState.value.copy(
-                    donationAccepted = donation,
+                    donationAccepted = requestDonation,
                     showDetails = false,
 
-                )
+                    )
             } else {
                 Log.e("SolicitationViewModel", "Error creating donation: $error")
                 _donationState.value = _donationState.value.copy(
@@ -78,14 +94,6 @@ class SolicitationViewModel(
                 )
             }
         }
-//        firebaseDatabaseService.updateRequestDonation(requestDonation.id, requestDonation.status) { success, error ->
-//            if (success) {
-//                Log.d("SolicitationViewModel", "Request donation updated successfully")
-//            } else {
-//                Log.e("SolicitationViewModel", "Error updating request donation: $error")
-//            }
-//        }
-
     }
 
     private fun onLaunch() {

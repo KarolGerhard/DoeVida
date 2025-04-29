@@ -68,6 +68,8 @@ dependencies {
     implementation(libs.androidx.material3.lint)
     implementation("com.google.code.gson:gson:2.10.1")
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.room.runtime.android)
+    implementation(libs.firebase.messaging.ktx)
 
 
 

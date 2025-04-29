@@ -9,25 +9,22 @@ class DonationUseCaseImpl(
     private val firebaseDatabaseService: FirebaseDatabaseService
 ) : DonationUseCase {
 
-    override fun getDonation(donationId: String) {
-        return donationRepository.getDonation(donationId)
-    }
-
-//    override fun createDonation(requestDonation: RequestDonation) {
-//        donationRepository.createDonation(requestDonation)
+//    override fun getDonation(donationId: String) {
+//        return donationRepository.getDonation(donationId)
 //    }
 //
-//    override fun updateDonation(requestDonation: RequestDonation) {
-//        donationRepository.updateDonation(requestDonation)
+//
+//    override fun deleteDonation(requestDonationId: RequestDonation) {
+//        donationRepository.deleteDonation(requestDonationId)
 //    }
 
-    override fun deleteDonation(requestDonationId: RequestDonation) {
-        donationRepository.deleteDonation(requestDonationId)
-    }
+//    override fun getUserSolicitations(userId: String): ArrayList<RequestDonation> {
+//        return donationRepository.getUserSolicitations(userId)
+//    }
 
-    override fun getUserSolicitations(userId: String): ArrayList<RequestDonation> {
-        return donationRepository.getUserSolicitations(userId)
-    }
+//    override fun getAcceptedDonationsByUser(userId: String): List<RequestDonation> {
+//        return firebaseDatabaseService.getUserSolicitations(userId).filter { it.status == "aceito" }
+//    }
 
     override fun getSolicitationsByCity(state: String, city: String) {
         firebaseDatabaseService.getSolicitationsByCity(state, city) { donations, error ->

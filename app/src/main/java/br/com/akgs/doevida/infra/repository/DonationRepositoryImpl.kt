@@ -10,19 +10,19 @@ class DonationRepositoryImpl(private val firebaseDatabaseService: FirebaseDataba
 //        return firebaseDatabaseService.createDonation(donation)
 //    }
 
-    override fun getDonation(donationId: String) {
-        firebaseDatabaseService.getDonation(donationId)
-    }
+//    override fun getDonation(donationId: String) {
+//        firebaseDatabaseService.getDonation(donationId)
+//    }
 
 //    override fun updateDonation(requestDonation: RequestDonation) {
 //        firebaseDatabaseService.updateDonation(requestDonation)
 //    }
 
-    override fun deleteDonation(requestDonation: RequestDonation) {
-        firebaseDatabaseService.deleteDonation(requestDonation)
-    }
+//    override fun deleteDonation(requestDonation: RequestDonation) {
+//        firebaseDatabaseService.deleteDonation(requestDonation)
+//    }
 
-    override  fun getUserSolicitations(userId: String): ArrayList<RequestDonation> {
-        return firebaseDatabaseService.getUserSolicitations(userId)
-    }
+//    override  fun getUserSolicitations(userId: String): ArrayList<RequestDonation> {
+//        return firebaseDatabaseService.getUserSolicitations(userId)
+//    }
 }

@@ -1,5 +1,6 @@
 package br.com.akgs.doevida.infra.di
 
+import br.com.akgs.doevida.infra.NotificationManager
 import br.com.akgs.doevida.infra.ReadJson
 import br.com.akgs.doevida.infra.remote.FirebasDatabaseServiceImpl
 import br.com.akgs.doevida.infra.remote.FirebaseAuthService
@@ -19,6 +20,11 @@ val infraModule = module {
     }
     single<DonationRepository> {
         DonationRepositoryImpl(
+            firebaseDatabaseService = get(),
+        )
+    }
+    single {
+        NotificationManager(
             firebaseDatabaseService = get(),
         )
     }

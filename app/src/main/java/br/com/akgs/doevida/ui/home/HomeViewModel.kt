@@ -14,8 +14,7 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val authService: FirebaseAuthService,
-    private val firebaseDatabaseService: FirebaseDatabaseService,
-    private val authUseCase: AuthUseCase
+    private val firebaseDatabaseService: FirebaseDatabaseService
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeState())
     val uiState = _uiState.asStateFlow()
@@ -35,6 +34,7 @@ class HomeViewModel(
 
     init {
         fetchUserData()
+        fetchUserDonationsCount()
     }
 
     private fun emitAction(action: HomeAction) {
@@ -50,6 +50,19 @@ class HomeViewModel(
                 _uiState.value = _uiState.value.copy(
                     user = user
                 )
+            }
+        }
+    }
+
+    fun fetchUserDonationsCount() {
+        val userId = authService.getUserId()
+        firebaseDatabaseService.getDonationsByUser(userId) { donations, error ->
+            if (donations != null) {
+                _uiState.value = _uiState.value.copy(
+                    donationsCount = donations.size
+                )
+            } else if (error != null) {
+                println("Erro ao buscar doações: ${error}")
             }
         }
     }

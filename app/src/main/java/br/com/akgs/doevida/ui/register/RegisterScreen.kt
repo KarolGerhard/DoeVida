@@ -37,10 +37,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import br.com.akgs.doevida.infra.Routes
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -59,7 +55,6 @@ fun RegisterScreen(
             onAction(action)
         }
     }
-
 
     Column(
         modifier = Modifier
