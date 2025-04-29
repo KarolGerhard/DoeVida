@@ -18,4 +18,5 @@ interface ProfileAction {
     data object OnToggleEstadoDropdown : ProfileAction
     data object OnToggleCidadeDropdown : ProfileAction
     data object OnBackClick : ProfileAction
+    data object OnShowTermos : ProfileAction
 }

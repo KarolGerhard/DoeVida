@@ -2,9 +2,6 @@ package br.com.akgs.doevida.ui.profile
 
 import br.com.akgs.doevida.infra.remote.entities.Donation
 import br.com.akgs.doevida.infra.remote.entities.RequestDonation
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 data class MyDonationState(
     var donations: List<Donation> = emptyList(),

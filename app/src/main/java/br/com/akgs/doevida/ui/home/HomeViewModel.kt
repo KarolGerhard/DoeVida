@@ -35,6 +35,7 @@ class HomeViewModel(
     init {
         fetchUserData()
         fetchUserDonationsCount()
+        hasNotifications(user.state, user.city)
     }
 
     private fun emitAction(action: HomeAction) {
@@ -82,6 +83,52 @@ class HomeViewModel(
     private fun showError(message: String) {
         TODO("Not yet implemented")
     }
+
+    private fun hasNotifications(estado: String, cidade: String) {
+        firebaseDatabaseService.getSolicitationsByCity(estado, cidade) { solicitations, error ->
+            _uiState.value = when {
+                error != null -> {
+                    _uiState.value.copy(
+                        isLoading = false,
+                        showNotifications = false
+                    )
+                }
+
+                solicitations.isNullOrEmpty() -> {
+                    _uiState.value.copy(
+                        isLoading = false,
+                        showNotifications = false
+                    )
+                }
+
+                else -> {
+                    _uiState.value.copy(
+                        isLoading = false,
+                        showNotifications = solicitations.any { it.bloodType == user.bloodType }
+                    )
+                }
+            }
+        }
+
+    }
+
+
+//    fun observeBotifications(){
+//        viewModelScope.launch {
+//            try {
+//                firebaseDatabaseService.getNotifications(user.id) { notification ->
+//                    if (notification != null) {
+//                        _uiState.value = _uiState.value.copy(
+//                            notification = notification
+//                        )
+//                    }
+//                }
+//            } catch (e: Exception) {
+//                println("Erro ao observar notificações: ${e.message}")
+//            }
+//        }
+//    }
+
 
 
 }

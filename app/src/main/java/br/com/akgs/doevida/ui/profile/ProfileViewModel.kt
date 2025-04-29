@@ -2,13 +2,10 @@ package br.com.akgs.doevida.ui.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.util.copy
 import br.com.akgs.doevida.domain.usecases.ReadJsonUseCase
-import br.com.akgs.doevida.infra.FirebaseMessagingManager
 import br.com.akgs.doevida.infra.NotificationManager
 import br.com.akgs.doevida.infra.remote.FirebaseAuthService
 import br.com.akgs.doevida.infra.remote.FirebaseDatabaseService
-import br.com.akgs.doevida.infra.remote.entities.Donation
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -57,7 +54,14 @@ class ProfileViewModel(
             ProfileAction.OnToggleEstadoDropdown -> onToggleEstadoDropdown()
             ProfileAction.OnToggleCidadeDropdown -> onToggleCidadeDropdown()
             ProfileAction.OnBackClick -> onBack()
+            ProfileAction.OnShowTermos -> onShowTermos()
         }
+    }
+
+    private fun onShowTermos() {
+        _uiState.value = _uiState.value.copy(
+            showTermos = true
+        )
     }
 
     fun updateUserBloodType(bloodType: String) {
@@ -197,6 +201,7 @@ class ProfileViewModel(
             editState = "",
             isEstadoDropdownExpanded = false,
             isCidadeDropdownExpanded = false,
+            showTermos = false,
         )
     }
 

@@ -22,7 +22,8 @@ data class ProfileState(
     val cities: List<String> = emptyList(),
     val isEstadoDropdownExpanded: Boolean = false,
     val isCidadeDropdownExpanded: Boolean = false,
-    val showDiscardChangesDialog : Boolean = false
+    val showDiscardChangesDialog : Boolean = false,
+    val showTermos: Boolean = false,
 ) {
 
 }
