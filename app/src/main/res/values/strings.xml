@@ -25,4 +25,14 @@
         <string name="solicitar">Solicitar</string>
         <string name="profile">Profile</string>
 
+    <string name="terms_of_use_title">Termos de Uso</string>
+    <string name="terms_of_use_content">Bem-vindo ao DoeVida!
+        Ao utilizar nosso aplicativo, você concorda com os seguintes Termos de Uso:\n\n1.
+        **Uso do Aplicativo**: O DoeVida é destinado a conectar doadores e receptores de sangue. O uso indevido do aplicativo é estritamente proibido.\n2. **Cadastro**: Você deve fornecer informações precisas e atualizadas ao se cadastrar.\n3. **Responsabilidade**: O DoeVida não se responsabiliza por informações incorretas fornecidas pelos usuários.\n4. **Alterações nos Termos**: Reservamo-nos o direito de alterar estes Termos a qualquer momento. Notificaremos os usuários sobre mudanças significativas.\n\nAo continuar utilizando o aplicativo, você concorda com os Termos atualizados.</string>
+
+    <string name="privacy_policy_title">Política de Privacidade</string>
+    <string name="privacy_policy_content">Sua privacidade é importante para nós. Esta Política de Privacidade descreve como coletamos, usamos e protegemos suas informações:\n\n1. **Coleta de Dados**: Coletamos informações como nome, e-mail, tipo sanguíneo e localização para melhorar a experiência do usuário.\n2. **Uso de Dados**: As informações coletadas são usadas exclusivamente para conectar doadores e receptores de sangue.\n3. **Compartilhamento de Dados**: Não compartilhamos suas informações com terceiros sem o seu consentimento.\n4. **Segurança**: Implementamos medidas de segurança para proteger suas informações pessoais.\n5. **Alterações na Política**: Podemos atualizar esta Política de Privacidade periodicamente. Notificaremos os usuários sobre mudanças significativas.\n\nAo utilizar o DoeVida, você concorda com esta Política de Privacidade.</string>
+
+
+
 </resources>

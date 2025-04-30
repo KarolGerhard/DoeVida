@@ -87,11 +87,6 @@ fun RegisterFirstPartForm(
                 }
             ),
         )
-        DateInputField(
-            label = "Data de nascimento",
-            selectedDate = state.dataNasc,
-            onDateSelected = { onAction(RegisterAction.OnDataNascChange(it)) }
-        )
         OutlinedTextField(
             value = state.phone,
             onValueChange = { onAction(RegisterAction.OnPhoneChange(it)) },

@@ -15,9 +15,14 @@ interface FirebaseDatabaseService {
     fun addUser(user: User, onComplete: (Boolean, String?) -> Unit)
 
     fun createRequestDonation(requestDonation: RequestDonation, onComplete: (Boolean, String?) -> Unit)
-    fun updateRequestDonation(requestDonationId: String, requestDonationStatus: String, onComplete: (Boolean, String?) -> Unit)
     fun deletRequestDonation(requestDonation: RequestDonation)
     fun getSolicitationsByCity(state: String, city: String, onComplete: (List<RequestDonation>?, String?) -> Unit)
     fun sendNotification(topic: String, title: String, body: String, onComplete: (Boolean, String?) -> Unit)
 
+    fun updateRequestDonation(
+        requestDonationId: String,
+        userId: String,
+        requestDonationStatus: String,
+        onComplete: (Boolean, String?) -> Unit
+    )
 }

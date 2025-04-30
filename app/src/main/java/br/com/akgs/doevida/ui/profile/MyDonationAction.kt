@@ -12,4 +12,5 @@ interface MyDonationAction {
     data class OnDateChange(val date: String) : MyDonationAction
     data object OnBackClick : MyDonationAction
     data class OnDateSelected(val date: String) : MyDonationAction
+    data object OnLaunch: MyDonationAction
 }

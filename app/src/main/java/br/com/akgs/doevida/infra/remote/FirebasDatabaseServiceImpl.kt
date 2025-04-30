@@ -54,9 +54,9 @@ class FirebasDatabaseServiceImpl : FirebaseDatabaseService {
             }
     }
 
-    override fun updateRequestDonation(requestDonationId: String, requestDonationStatus: String, onComplete: (Boolean, String?) -> Unit) {
+    override fun updateRequestDonation(requestDonationId: String, userId: String, requestDonationStatus: String, onComplete: (Boolean, String?) -> Unit) {
         firestore.collection("REQUEST_DONATION").document(requestDonationId)
-            .update("status", requestDonationStatus)
+            .update("status", requestDonationStatus, "userId", userId)
             .addOnSuccessListener {
                 onComplete(true, null)
             }

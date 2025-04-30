@@ -48,6 +48,7 @@ class MyDonationViewModel(
 
     init {
         getDonationsAccepted()
+        getDonationsByUser()
     }
 
     private fun getDonationsAccepted() {

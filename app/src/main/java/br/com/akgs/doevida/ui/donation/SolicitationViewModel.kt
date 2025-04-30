@@ -77,6 +77,7 @@ class SolicitationViewModel(
         )
         firebaseDatabaseService.updateRequestDonation(
             requestDonation.id,
+            requestDonation.userId,
             requestDonation.status
         ) { success, error ->
             if (success) {

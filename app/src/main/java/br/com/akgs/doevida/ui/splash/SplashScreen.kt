@@ -54,7 +54,9 @@ fun SplashScreen(
                 .size(400.dp)
         )
         if (uiState.value.isLoading) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(
+                modifier = Modifier.size(50.dp)
+            )
         } else if (uiState.value.error != null) {
             Text(text = "Error: ${uiState.value.error}")
         }

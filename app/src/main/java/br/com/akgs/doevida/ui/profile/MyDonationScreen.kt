@@ -50,6 +50,8 @@ import br.com.akgs.doevida.ui.donation.components.RequesetDonationDetailsBottomS
 import br.com.akgs.doevida.ui.enums.SolicitationState
 import br.com.akgs.doevida.ui.home.HomeAction
 import br.com.akgs.doevida.ui.navigation.TopAppBar
+import br.com.akgs.doevida.ui.util.DateVisualTransformation
+import br.com.akgs.doevida.ui.util.formatDate
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions.Builder
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions.DEFAULT_SIGN_IN
@@ -172,12 +174,12 @@ fun MyDonationScreen(
                                 Text(
                                     modifier = Modifier
                                         .padding(end = 8.dp),
-                                    text = it.dateDonation,
+                                    text = it.dateDonation.formatDate(),
                                     style = TextStyle(
                                         color = Color(0xFF95313B),
                                         fontSize = 20.sp,
                                         fontWeight = FontWeight.SemiBold,
-                                    )
+                                    ),
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
