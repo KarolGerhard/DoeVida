@@ -1,4 +1,4 @@
-package br.com.akgs.doevida.infra.service
+package br.com.akgs.doevida.infra.remote
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

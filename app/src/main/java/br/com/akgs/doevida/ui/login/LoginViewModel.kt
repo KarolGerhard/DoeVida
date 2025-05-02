@@ -2,9 +2,7 @@ package br.com.akgs.doevida.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.akgs.doevida.domain.usecases.AuthUseCase
 import br.com.akgs.doevida.infra.remote.FirebaseAuthService
-import br.com.akgs.doevida.ui.register.RegisterState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -12,7 +10,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val authUseCase: AuthUseCase,
      private val authService: FirebaseAuthService
 ): ViewModel() {
 
@@ -57,15 +54,6 @@ class LoginViewModel(
         )
     }
 
-
-//    fun login(email: String, password: String): String {
-//        return try {
-//            authUseCase.login(email, password)
-//            "Success"
-//        } catch (e: Exception) {
-//            "Failure: ${e.message}"
-//        }
-//    }
 
     private fun onLoginClick() {
         val email = _uiState.value.email

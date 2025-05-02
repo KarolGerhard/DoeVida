@@ -17,9 +17,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.akgs.doevida.R
-import br.com.akgs.doevida.ui.login.LoginAction
-import br.com.akgs.doevida.ui.login.LoginViewModel
-import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

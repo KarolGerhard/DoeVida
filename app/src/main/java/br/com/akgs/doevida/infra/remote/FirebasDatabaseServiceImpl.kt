@@ -163,7 +163,6 @@ class FirebasDatabaseServiceImpl : FirebaseDatabaseService {
         firestore.collection("REQUEST_DONATION")
             .whereEqualTo("state", state)
             .whereEqualTo("city", city)
-//            .orderBy("status", Query.Direction.ASCENDING)
             .get()
             .addOnSuccessListener { result ->
                 val requestDonations = result.map { document ->
@@ -196,7 +195,7 @@ class FirebasDatabaseServiceImpl : FirebaseDatabaseService {
                 )
             )
 
-            // Simulação de envio de notificação (substitua por uma chamada HTTP real se necessário)
+            // Simulação de envio de notificação
             firestore.collection("NOTIFICATIONS").add(notificationData)
                 .addOnSuccessListener {
                     onComplete(true, null)

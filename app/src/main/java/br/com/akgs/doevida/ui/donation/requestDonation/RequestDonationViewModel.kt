@@ -7,7 +7,6 @@ import br.com.akgs.doevida.infra.NotificationManager
 import br.com.akgs.doevida.infra.remote.FirebaseAuthService
 import br.com.akgs.doevida.infra.remote.FirebaseDatabaseService
 import br.com.akgs.doevida.infra.remote.entities.RequestDonation
-import br.com.akgs.doevida.ui.login.LoginAction
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -101,8 +100,6 @@ class RequestDonationViewModel(
                 } else if (error != null) {
                     // Handle error
                     println("Erro ao criar solicitação: ${error}").toString()
-//                _requestDonationState.value = _requestDonationState.value.copy(
-//                    message = "Erro ao criar solicitação: ${error.message}"
 //                )
                 } else {
                     // Handle error

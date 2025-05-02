@@ -7,7 +7,6 @@ import br.com.akgs.doevida.domain.usecases.DonationUseCase
 import br.com.akgs.doevida.infra.remote.FirebaseAuthService
 import br.com.akgs.doevida.infra.remote.FirebaseDatabaseService
 import br.com.akgs.doevida.infra.remote.entities.RequestDonation
-import br.com.akgs.doevida.ui.profile.ProfileAction
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -38,7 +37,6 @@ class SolicitationViewModel(
                     showDetails = false
                 )
             }
-//            is SolicitationAction.OnShowDetails -> onShowDetails()
             is SolicitationAction.OnSelectItem -> onSelectItem(action.type)
             SolicitationAction.OnBackClick -> onBack()
 

@@ -3,8 +3,6 @@ package br.com.akgs.doevida.ui.splash
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.akgs.doevida.infra.remote.FirebaseAuthService
-import br.com.akgs.doevida.ui.login.LoginAction
-import br.com.akgs.doevida.ui.login.LoginState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

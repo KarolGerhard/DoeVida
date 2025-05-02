@@ -6,11 +6,7 @@ interface RequestDonationAction {
     data class OnPhoneChange(val phone: String) : RequestDonationAction
     data class OnEstadoChange(val estado: String) : RequestDonationAction
     data class OnCidadeChange(val cidade: String) : RequestDonationAction
-    data class OnDataNascChange(val birthDate: String) : RequestDonationAction
     data class OnTipoSanguineoChange(val bloodType: String) : RequestDonationAction
     data class OnTipoPedidoChange(val type: String) : RequestDonationAction
-    data object OnContinueClick : RequestDonationAction
     data object OnSaveClick : RequestDonationAction
-    data object OnSaveSuccess : RequestDonationAction
-    data object OnLaunch: RequestDonationAction
 }

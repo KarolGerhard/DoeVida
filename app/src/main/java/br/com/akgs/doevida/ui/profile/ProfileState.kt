@@ -1,6 +1,5 @@
 package br.com.akgs.doevida.ui.profile
 
-import br.com.akgs.doevida.infra.Estado
 import br.com.akgs.doevida.infra.remote.entities.Donation
 import br.com.akgs.doevida.infra.remote.entities.User
 

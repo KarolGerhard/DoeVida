@@ -2,8 +2,6 @@ package br.com.akgs.doevida.infra
 
 import br.com.akgs.doevida.infra.remote.FirebaseDatabaseService
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.FirebaseMessagingService
-import com.google.firebase.messaging.messaging
 
 class NotificationManager(
     private val firebaseDatabaseService: FirebaseDatabaseService,

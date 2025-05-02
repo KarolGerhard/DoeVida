@@ -17,7 +17,6 @@ class FirebaseAuthServiceImpl : FirebaseAuthService {
                     val userId = task.result?.user?.uid
                     user.id = userId ?: ""
                     onComplete(true, userId)
-                    //task.result?.user?.uid
                 } else {
                     onComplete(false, task.exception?.message)
                 }

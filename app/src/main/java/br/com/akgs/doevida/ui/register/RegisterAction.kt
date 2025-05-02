@@ -1,6 +1,5 @@
 package br.com.akgs.doevida.ui.register
 
-import br.com.akgs.doevida.ui.login.LoginAction
 
 interface RegisterAction {
     data class OnEmailChange(val email: String) : RegisterAction
@@ -14,6 +13,4 @@ interface RegisterAction {
     data class OnTipoSanguineoChange(val bloodType: String) : RegisterAction
     data object OnContinueClick : RegisterAction
     data object OnRegisterClick : RegisterAction
-    data object OnLaunch: RegisterAction
-    data object OnRegisterSuccess: RegisterAction
 }

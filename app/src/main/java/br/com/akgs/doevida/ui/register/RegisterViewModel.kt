@@ -2,12 +2,10 @@ package br.com.akgs.doevida.ui.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.akgs.doevida.domain.usecases.AuthUseCase
 import br.com.akgs.doevida.domain.usecases.ReadJsonUseCase
 import br.com.akgs.doevida.infra.remote.FirebaseAuthService
 import br.com.akgs.doevida.infra.remote.FirebaseDatabaseService
 import br.com.akgs.doevida.infra.remote.entities.User
-import br.com.akgs.doevida.ui.login.LoginAction
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow

@@ -7,10 +7,6 @@ class UserUseCaseImpl(
     private val userRepository: UserRepository
 ) : UserUseCase {
 
-//    override fun getUser(userId: String): User? {
-//        return userRepository.getUserById(userId)
-//    }
-
     override fun createUser(user: User) {
         userRepository.addUser(user)
     }

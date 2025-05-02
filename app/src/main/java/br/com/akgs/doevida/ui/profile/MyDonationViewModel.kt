@@ -17,8 +17,7 @@ import java.util.Locale
 
 class MyDonationViewModel(
     private val authService: FirebaseAuthService,
-    private val firebaseDatabaseService: FirebaseDatabaseService,
-    private val donationUseCase: DonationUseCase
+    private val firebaseDatabaseService: FirebaseDatabaseService
 ) : ViewModel() {
 
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())

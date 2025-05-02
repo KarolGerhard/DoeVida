@@ -3,7 +3,6 @@ package br.com.akgs.doevida.infra
 import android.content.Context
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
-import java.io.File
 import java.io.InputStreamReader
 import com.google.gson.Gson
 
@@ -35,8 +34,3 @@ class ReadJson(private val context: Context) {
     }
 }
 
-//fun readEstadosFromJson(fileName: String): List<Estado> {
-//    val inputStream = context.assets.open(fileName)
-//    val json = inputStream.bufferedReader().use { it.readText() }
-//    return Json.decodeFromString(json)
-//}

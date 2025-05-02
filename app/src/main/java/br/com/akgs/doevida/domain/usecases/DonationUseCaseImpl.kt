@@ -5,26 +5,8 @@ import br.com.akgs.doevida.infra.remote.entities.RequestDonation
 import br.com.akgs.doevida.infra.repository.DonationRepository
 
 class DonationUseCaseImpl(
-    private val donationRepository: DonationRepository,
     private val firebaseDatabaseService: FirebaseDatabaseService
 ) : DonationUseCase {
-
-//    override fun getDonation(donationId: String) {
-//        return donationRepository.getDonation(donationId)
-//    }
-//
-//
-//    override fun deleteDonation(requestDonationId: RequestDonation) {
-//        donationRepository.deleteDonation(requestDonationId)
-//    }
-
-//    override fun getUserSolicitations(userId: String): ArrayList<RequestDonation> {
-//        return donationRepository.getUserSolicitations(userId)
-//    }
-
-//    override fun getAcceptedDonationsByUser(userId: String): List<RequestDonation> {
-//        return firebaseDatabaseService.getUserSolicitations(userId).filter { it.status == "aceito" }
-//    }
 
     override fun getSolicitationsByCity(state: String, city: String) {
         firebaseDatabaseService.getSolicitationsByCity(state, city) { donations, error ->
